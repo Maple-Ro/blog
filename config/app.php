@@ -106,7 +106,7 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
-    'themes'=>'default', //switch different themes
+    'themes' => 'default', //switch different themes
 
     /*
     |--------------------------------------------------------------------------

@@ -4,12 +4,9 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
-
+        <title>{{ config('app.name', '枫叶映像') }}</title>
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
         <!-- Styles -->
         <style>
             html, body {
@@ -78,9 +75,13 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
+                <p align="center">
+                <h1></h1>由于网站改版，请前往归档查看</h1>
+
+                <br/>
+                <br/>
+                thanks!
+                </p>
 
                 <div class="links">
                     <a href="https://laravel.com/docs">Documentation</a>

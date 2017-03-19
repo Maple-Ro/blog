@@ -11,5 +11,18 @@ namespace App\Presenter;
 
 class labelPresenter
 {
+    function label(array $data)
+    {
+        $html = '<div>';
+        if (!empty($data)) {
+            foreach ($data as $i) {
+                $html .= '<a href="' . $i->url . '">' . $i->name . '</a>';
+            }
+        } else {
+            $html .= '<a>暂无标签</a>';
+        }
+        $html .= '</div>';
+        return $html;
+    }
 
 }

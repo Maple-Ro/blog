@@ -1,12 +1,12 @@
 <?php
-namespace App\Presenter;
+namespace App\Presenters;
 /**
  * Description:
  * User: Endless
  * Date: 2017/3/19
  * Time: 23:44
  */
-class hotPresenter
+class hotPresenters
 {
     function hot(array $hot)
     {

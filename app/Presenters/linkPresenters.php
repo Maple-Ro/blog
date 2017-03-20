@@ -1,12 +1,12 @@
 <?php
-namespace App\Presenter;
+namespace App\Presenters;
 /**
  * Description:
  * User: Endless
  * Date: 2017/3/19
  * Time: 23:37
  */
-class linkPresenter
+class linkPresenters
 {
     function link(array $links)
     {

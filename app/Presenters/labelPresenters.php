@@ -6,10 +6,10 @@
  * Time: 00:09
  */
 
-namespace App\Presenter;
+namespace App\Presenters;
 
 
-class labelPresenter
+class labelPresenters
 {
     function label(array $data)
     {

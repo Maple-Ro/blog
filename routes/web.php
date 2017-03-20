@@ -12,6 +12,5 @@
 */
 
 Route::get('/', function () {
-//    return frontView('mother');
     return frontView('common.mother');
 });

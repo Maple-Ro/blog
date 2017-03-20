@@ -65,6 +65,18 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT', '27017'),
+            'username' => '',
+            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE', 'blog'),
+            'options' => [
+                'replicaSet' => 'epgSet',
+                'db' => 'admin'
+            ]
+        ]
 
     ],
 

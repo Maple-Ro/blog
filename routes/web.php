@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return frontView('common.mother');
+Route::group(['namespace' => 'front'], function () {
+    Route::get('/', 'IndexController@index');
+});
+
+//后台
+Route::group(['namespace' => 'back', 'prefix' => env('APP_BACK')], function () {
+    Route::get('/', 'IndexController@index');
 });

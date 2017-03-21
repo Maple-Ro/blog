@@ -107,7 +107,7 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
-    'themes' => 'default', //switch different themes
+    'themes' => env('APP_THEMES', 'default'), //switch different themes
 
     /*
     |--------------------------------------------------------------------------

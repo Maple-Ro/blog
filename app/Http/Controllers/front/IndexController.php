@@ -15,6 +15,6 @@ class IndexController extends Controller
 {
     public function index()
     {
-        return frontView('common.mother');
+        return frontView('content');
     }
 }

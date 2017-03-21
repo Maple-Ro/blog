@@ -13,6 +13,8 @@ return [
     |
     */
 
+    'fetch' => PDO::FETCH_CLASS,
+
     'default' => env('DB_CONNECTION', 'mysql'),
 
     /*

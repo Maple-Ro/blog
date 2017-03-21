@@ -18,4 +18,5 @@ Route::group(['namespace' => 'front'], function () {
 //后台
 Route::group(['namespace' => 'back', 'prefix' => env('APP_BACK')], function () {
     Route::get('/', 'IndexController@index');
+    Route::get('/insert', 'IndexController@insert');
 });

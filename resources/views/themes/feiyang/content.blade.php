@@ -7,7 +7,7 @@
         <!--文章列表-->
         <article class="post">
             <h2 class="title">
-                <a href="/2014/05/handle-php-error-better-introduce-errors">
+                <a href="#">
                     我的网站测试中。。。</a>
             </h2>
             <div class="entry-content">

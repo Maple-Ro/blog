@@ -23,7 +23,7 @@
         }
 
         #sub-nav .social a.google {
-            background: url({{homeAssets('/images/google.png')}}) center no-repeat #c83d20;
+            background: url({{homeAssets('/images/weibo.png')}}) center no-repeat #c83d20;
             border: 1px solid #C83D20
         }
 
@@ -120,6 +120,6 @@
 @include('themes.feiyang.nav')
 <!--内容区域-->
 @yield('content')
-<footer id="footer" class="inner">Copyright &copy; 2014 MapleImage - 枫叶映像</footer>
+<footer id="footer" class="inner">Copyright &copy; 2017 - MapleImage - 枫叶映像</footer>
 </body>
 </html>

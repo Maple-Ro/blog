@@ -23,3 +23,26 @@ if (!function_exists('frontView')) {
         return $factory->make($themes . '.' . $view, $data, $mergeData);
     }
 }
+if (!function_exists('callApiServer')) {
+    function callApiServer(string $serverUrl, array $params)
+    {
+        try {
+            $url = 'http://rap.taobao.org/mockjsdata/15778' . $serverUrl;
+            $client = new GuzzleHttp\Client();
+            $response = $client->request('get', $url, ['query' => $params]);
+            $result = $response->getBody();
+            if (empty($result)) {
+                return json_decode('{"code":"500","status":"failed","msg":"api数据异常" }');
+            }
+            return json_decode($result);
+        } catch (\Exception $e) {
+            $error = [
+                'code' => 500,
+                'status' => 'failed',
+                'msg' => $e->getMessage()
+            ];
+            $va = json_decode(json_encode($error));
+            return $va;
+        }
+    }
+}

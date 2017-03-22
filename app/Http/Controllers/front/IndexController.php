@@ -15,7 +15,12 @@ class IndexController extends Controller
 {
     public function index()
     {
-        $data = [];
+        $r = $this->call('/web/article_list');
+        if ($r->code != 200) {
+            $data = [];
+        } else {
+            $data = $r->data;
+        }
         return frontView('content')->with(compact(['data']));
     }
 }

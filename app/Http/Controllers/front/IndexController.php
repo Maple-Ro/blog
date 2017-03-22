@@ -15,6 +15,7 @@ class IndexController extends Controller
 {
     public function index()
     {
-        return frontView('content');
+        $data = [];
+        return frontView('content')->with(compact(['data']));
     }
 }

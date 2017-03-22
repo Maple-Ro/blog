@@ -1,5 +1,5 @@
 <?php
-namespace APP\Presenters;
+namespace App\Presenters;
 
 class ArticlePresenter
 {

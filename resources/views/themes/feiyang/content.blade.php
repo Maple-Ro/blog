@@ -1,5 +1,5 @@
 @extends('themes.feiyang.common')
-@inject('article', 'APP\Presenters\ArticlePresenter')
+@inject('article', 'App\Presenters\ArticlePresenter')
 @section('title')
     枫叶映像
 @endsection

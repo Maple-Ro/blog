@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use Moloquent;
+use Jenssegers\Mongodb\Eloquent\Model as Moloquent;
 
 class Info extends Moloquent
 {

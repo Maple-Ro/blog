@@ -75,8 +75,7 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'database' => env('DB_DATABASE', 'blog'),
             'options' => [
-                'replicaSet' => 'epgSet',
-                'db' => 'admin'
+                'database' => 'admin'
             ]
         ]
 

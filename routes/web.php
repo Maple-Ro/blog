@@ -13,6 +13,7 @@
 
 Route::group(['namespace' => 'front'], function () {
     Route::get('/', 'IndexController@index');
+    Route::get('/test', 'IndexController@test');
     Route::get('/cls', function () {
         \Illuminate\Support\Facades\Artisan::call('cache:clear');
         \Illuminate\Support\Facades\Artisan::call('view:clear');

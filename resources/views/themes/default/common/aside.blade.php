@@ -1,3 +1,4 @@
+<!--侧拉区域-->
 <aside id="sidebar" class="sidebar">
     <div class="sidebar-inner">
         <section class="site-overview sidebar-panel sidebar-panel-active">
@@ -46,17 +47,13 @@
               </span>
                 <span class="links-of-author-item">
                 <a href="http://weibo.com/ouyanglip" target="_blank" title="weibo">
-
                     <i class="fa fa-fw fa-weibo"></i>
-
                   weibo
                 </a>
               </span>
                 <span class="links-of-author-item">
                 <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank" title="zhihu">
-
                     <i class="fa fa-fw fa-battery-3"></i>
-
                   zhihu
                 </a>
               </span>

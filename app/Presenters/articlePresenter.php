@@ -16,12 +16,12 @@ class ArticlePresenter
                     ' . $i->title . '</a>
             </h2>
             <div class="entry-content">
-                <p>' . $i->summary . '</p>
+                <p>' . mb_substr($i->summary, 0, 30) . '</p>
                 <a href="#" class="more-link">Read on &rarr;</a>
             </div>
             <div class="meta">
                 <div class="date">
-                    <time datetime="' . $i->date . '" pubdate data-updated="true">' . $i->day . '<span>' . $i->weekday . '</span>, ' . $i->year . '
+                    <time datetime="' . $i->date . '" pubdate data-updated="true">' . $i->day . '&nbsp;&nbsp;<span>' . $i->weekday . '</span>, ' . $i->year . '
                     </time>
                 </div>
                 <div class="tags">

@@ -20,10 +20,17 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet"
           type="text/css"/>
     <link href="{{homeAssets('/css/main.css')}}" rel="stylesheet" type="text/css"/>
+    <script href="{{homeAssets('/js/favico.js')}}" type="text/javascript"></script>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 <script type="text/javascript">
     var _hmt = _hmt || [];
+    window.onload = function () {
+        var favicon = new Favico({
+            animation: 'slide'
+        });
+        favicon.badge(1);
+    }
     (function () {
         var hm = document.createElement("script");
         hm.src = "https://hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";

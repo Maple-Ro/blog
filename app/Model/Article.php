@@ -9,7 +9,6 @@
 namespace App\Model;
 
 use Jenssegers\Mongodb\Eloquent\Model as Moloquent;
-
 /**
  * 文章
  * Class Article
@@ -20,6 +19,7 @@ class Article extends Moloquent
     protected $connection = 'mongodb';
     protected $collection = 'article';
     protected $primaryKey = '_id';
+    protected $dateFormat = 'Y-m-d H:i:s';
 }
 
 //单条文章存储数据格式：

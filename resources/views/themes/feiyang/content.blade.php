@@ -1,7 +1,7 @@
 @extends('themes.feiyang.common')
 @inject('article', 'App\Presenters\ArticlePresenter')
 @section('title')
-    枫叶映像
+    MapleImage - 枫叶映像
 @endsection
 @section('content')
     <div id="content" class="inner">

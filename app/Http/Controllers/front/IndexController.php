@@ -16,14 +16,24 @@ class IndexController extends Controller
     public function index()
     {
         $r = $this->call('/web/article_list');
-        if ($r->code != 200) {
-            $data = [];
+        if ($r->code !== 200) {
+            abort(503);
         } else {
             $data = $r->data;
+            return frontView('content')->with(compact(['data']));
         }
-        return frontView('content')->with(compact(['data']));
     }
 
+    function detail($id)
+    {
+        $r = $this->call('/web/article_content', ['id' => $id]);
+        if ($r->code != 200) {
+            abort(404);
+        } else {
+            $data = $r->data;
+            return frontView('detail')->with(compact(['data']));
+        }
+    }
     public function test()
     {
         $seedData = [

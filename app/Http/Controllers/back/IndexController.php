@@ -6,7 +6,7 @@
  * Time: 9:42
  */
 
-namespace app\Http\Controllers\back;
+namespace App\Http\Controllers\back;
 
 
 use App\Http\Controllers\Controller;
@@ -21,11 +21,17 @@ class IndexController extends Controller
 
     function insert()
     {
-        Info::create([
-            'name' => 'MapleImage',
-            'email' => 'liutsingluo@163.com',
-            'description' => 'Hope is a good thing'
-        ]);
+//        Info::create([
+//            'name' => 'MapleImage',
+//            'email' => 'liutsingluo@163.com',
+//            'description' => 'Hope is a good thing'
+//        ]);
+        return Info::all();
     }
+//    function insert2(){
+//        $info = new Info;
+//        $info->name = 'John';
+//        $info->save();
+//    }
 
 }

@@ -13,6 +13,7 @@
 
 Route::group(['namespace' => 'front'], function () {
     Route::get('/', 'IndexController@index');
+    Route::get('/detail/{id}', 'IndexController@detail');
     Route::get('/test', 'IndexController@test');
     Route::get('/cls', function () {
         \Illuminate\Support\Facades\Artisan::call('cache:clear');
@@ -25,4 +26,5 @@ Route::group(['namespace' => 'front'], function () {
 Route::group(['namespace' => 'back', 'prefix' => env('APP_BACK')], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/insert', 'IndexController@insert');
+    Route::get('/insert2', 'IndexController@insert2');
 });

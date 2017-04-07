@@ -26,38 +26,101 @@ class ArticleController extends Controller
     }
 
     /**
-     * 插入单条记录
+     * 添加单条记录
      * @param Request $request
      * @return string id主键
      */
-    function add(Request $request): string
+    function add(Request $request): bool
     {
         $article = new Article();
-//        $data = $request->data;
-        $article->content = '222';
-//        $article->setDateFormat('Y-m-d H:i:s');
-//        $article->content = $data->content;
-//        $article->weekday = $data->weekday;
-//        $article->title = $data->title;
-        $article->save();
-        return $this->article->id;
+        return $this->insert($request, $article);
     }
 
+    /**
+     * 所有记录
+     * @return array
+     */
     function all(): array
     {
         return Article::all();
     }
 
+    /**
+     * 根据id获取文章
+     * @param string $id
+     * @return Article
+     */
     function one(string $id): Article
     {
-        return Article::where('_id', 'one', $id)->get();
+        return Article::find($id);
     }
 
-    function del(string $id): bool
+    /**
+     * 删除多个记录
+     * @param array $ids
+     * @return int
+     */
+    function delMany(array $ids): int
+    {
+        return Article::destroy($ids);
+    }
+
+    /**
+     * 删除单个记录
+     * @param string $id
+     * @return int
+     */
+    function delOne(string $id): int
+    {
+        return Article::destroy($id);
+    }
+
+    /**
+     * 更新单个字段
+     * @param String $id
+     * @param string $field
+     * @param string $data
+     * @return bool
+     */
+    function updateOneField(String $id, string $field, string $data): bool
+    {
+        $artice = $this->one($id);
+        try {
+            $artice->$field = $data;
+            return $artice->save();
+        } catch (\Exception $e) { //找不到字段
+            return false;
+        }
+    }
+
+    /**
+     * 更新整条记录
+     * @param Request $request
+     * @param string $id
+     * @return bool
+     */
+    function update(Request $request, string $id): bool
     {
         $article = $this->one($id);
-        $article->status = 0;//0表示删除了的
-        $article->save();
+        return $this->insert($request, $article);
     }
 
+    /**
+     * 插入记录
+     * @param Request $request
+     * @param Article $article
+     * @return bool
+     */
+    private function insert(Request $request, Article $article): bool
+    {
+        try {
+            $article->content = $request->data->content;
+            $article->title = $request->data->title;
+            $article->label = $request->data->label;
+            return $article->save();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+    //TODO 插入新的字段
 }

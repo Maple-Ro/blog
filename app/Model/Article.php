@@ -9,33 +9,21 @@
 namespace App\Model;
 
 use Jenssegers\Mongodb\Eloquent\Model as Moloquent;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+
 /**
- * 文章
+ * 文章Model
  * Class Article
+ * 使用软删除
  * @package App\Model
  */
 class Article extends Moloquent
 {
+    use SoftDeletes;
     protected $connection = 'mongodb';
     protected $collection = 'article';
     protected $primaryKey = '_id';
-    protected $dateFormat = 'Y-m-d H:i:s';
+    protected $dates = ['deleted_at'];
+    //关键字段
+    //content(string), title(string), label([string])
 }
-
-//单条文章存储数据格式：
-//    {
-//        "code": 200,
-//    "data": [
-//        {
-//            "content": "0",
-//            "date": "2017-03-22",
-//            "day": "2017-03-22",
-//            "id": 1,
-//            "title": "我的标题",
-//            "weekday": "wed",
-//            "year": "2017"
-//        }
-//    ],
-//    "msg": "",
-//    "status": "success"
-//}

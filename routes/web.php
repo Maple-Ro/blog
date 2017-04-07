@@ -28,4 +28,6 @@ Route::group(['namespace' => 'back', 'prefix' => env('APP_BACK')], function () {
 //    Route::get('/insert', 'IndexController@insert');
     Route::get('/insert2', 'IndexController@insert2');
     Route::get('/add', 'ArticleController@add');
+    Route::get('/del/{id}', 'ArticleController@delOne');
+    Route::get('/fetch/{id}', 'ArticleController@one');
 });

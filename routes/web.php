@@ -20,6 +20,8 @@ Route::group(['namespace' => 'front'], function () {
         \Illuminate\Support\Facades\Artisan::call('view:clear');
         return "cache clear success";
     });
+    Route::get('/add', 'LogController@add');
+    Route::get('/sum', 'LogController@sum');
 });
 
 //后台

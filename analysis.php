@@ -34,7 +34,7 @@ foreach ($results2 as $k => $v) {
     $results3[$j]['num'] = $v;
     $j++;
 }
-$shadowsocks_log = (new MongoDB\Client())->blog->shadowsocks_log;
+//$shadowsocks_log = (new MongoDB\Client())->blog->shadowsocks_log;
 $shadowsocks_static_log = (new MongoDB\Client())->blog->shadowsocks_static_log;
-$shadowsocks_log->insertMany($results);
+//$shadowsocks_log->insertMany($results);
 $shadowsocks_static_log->insertMany($results3);

@@ -12,6 +12,13 @@ if (!function_exists('homeAssets')) {
         return app('url')->asset($themes . $path, $secure);
     }
 }
+if (!function_exists('backAssets')) {
+    function backAssets(string $path, boolean $secure = null)
+    {
+        $themes = THEMES_NAME_BACK . DIRECTORY_SEPARATOR;
+        return app('url')->asset($themes . $path, $secure);
+    }
+}
 if (!function_exists('frontView')) {
     function frontView(string $view, array $data = [], array $mergeData = [])
     {
@@ -20,6 +27,17 @@ if (!function_exists('frontView')) {
             return $factory;
         }
         $themes = THEMES_NAME . '.' . Config::get('app.themes');
+        return $factory->make($themes . '.' . $view, $data, $mergeData);
+    }
+}
+if (!function_exists('backView')) {
+    function backView(string $view, array $data = [], array $mergeData = [])
+    {
+        $factory = app('Illuminate\Contracts\View\Factory');
+        if (func_num_args() === 0) {
+            return $factory;
+        }
+        $themes = THEMES_NAME_BACK;
         return $factory->make($themes . '.' . $view, $data, $mergeData);
     }
 }

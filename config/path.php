@@ -6,3 +6,4 @@
  * Time: 23:22
  */
 define('THEMES_NAME', 'themes');
+define('THEMES_NAME_BACK', 'back');

@@ -6,7 +6,7 @@
 @section('content')
     <div id="content" class="inner">
         <!--文章列表-->
-        {!! $article->article($data,2) !!}
+        {!! $article->detail($data) !!}
         <nav id="pagenavi">
             <a href="#" class="next">Next</a>
             <div class="center"><a href="#">Blog Archives</a></div>

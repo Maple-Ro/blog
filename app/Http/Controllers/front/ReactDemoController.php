@@ -272,13 +272,19 @@ class ReactDemoController extends Controller
 
     function del(int $id)
     {
-        return ReactDemo::where('id', '=', $id)->delete();
+        $result = ReactDemo::where('id', '=', $id)->delete();
+        if (!!$result) {
+            return $this->res(['code' => 200]);
+        } else {
+            return $this->res(['code' => 500, 'msg' => 'server error']);
+        }
     }
 
     /**
      * 更新
      * @param Request $request
      * @param $id
+     * @return string
      */
     function edit(Request $request, $id)
     {
@@ -286,12 +292,18 @@ class ReactDemoController extends Controller
         $r->name = $request->name;
         $r->email = $request->email;
         $r->website = $request->website;
-        $r->save();
+        $result = $r->save();
+        if (!!$result) {
+            return $this->res(['code' => 200]);
+        } else {
+            return $this->res(['code' => 500, 'msg' => 'server error']);
+        }
     }
 
     /**
      * 创建
      * @param Request $request
+     * @return string
      */
     function create(Request $request)
     {
@@ -302,6 +314,11 @@ class ReactDemoController extends Controller
         //获取数据库已有的最大id值
         $id = ReactDemo::max('id');
         $r->id = $id + 1;
-        $r->save();
+        $result = $r->save();
+        if (!!$result) {
+            return $this->res(['code' => 200]);
+        } else {
+            return $this->res(['code' => 500, 'msg' => 'server error']);
+        }
     }
 }

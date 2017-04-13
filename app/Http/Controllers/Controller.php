@@ -18,18 +18,12 @@ class Controller extends BaseController
 
     /**
      * 跨域请求输出方法
-     * @param string $contents
-     * @param string|null $self_header
+     * @param array $data
      * @return mixed
      */
-    protected function res(string $contents, string $self_header = null)
+    protected function res(array $data)
     {
-        if (!!$self_header) {
-            $result = response($contents)->header('x-total-count', $self_header);
-        } else {
-            $result = response($contents);
-        }
-        return $result
+        return response()->json($data)
             ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
             ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin')

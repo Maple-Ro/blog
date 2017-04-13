@@ -266,8 +266,8 @@ class ReactDemoController extends Controller
         $page = $request->_page;
         $limit = intval($request->_limit);
         $total = ReactDemo::count('id');
-        $contents = ReactDemo::forPage($page, $limit)->get();
-        return $this->res($contents, $total);
+        $contents = ReactDemo::forPage($page, $limit)->get();// TODO 返回状态判断
+        return $this->res(['total' => $total, 'data' => $contents]);
     }
 
     function del(int $id)

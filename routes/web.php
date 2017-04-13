@@ -22,7 +22,7 @@ Route::group(['namespace' => 'front'], function () {
     });
     Route::get('/add', 'LogController@add');
     Route::get('/sum', 'LogController@sum');
-    Route::get('/fetchReactDemo/{_page}/{_limit}', 'ReactDemoController@fetch');
+    Route::get('/fetchReactDemo', 'ReactDemoController@fetch');
     Route::get('/delReactDemo/{id}', 'ReactDemoController@del');
     Route::post('/editReactDemo/{id}', 'ReactDemoController@edit');
     Route::post('/createReactDemo', 'ReactDemoController@create');

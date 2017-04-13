@@ -258,15 +258,16 @@ class ReactDemoController extends Controller
     }
 
     /**
-     * @param int $page
-     * @param int $limit
+     * @param Request $request
+     * @return mixed
      */
-    function fetch(int $page, int $limit)
+    function fetch(Request $request)
     {
+        $page = $request->_page;
+        $limit = intval($request->_limit);
         $total = ReactDemo::count('id');
         $contents = ReactDemo::forPage($page, $limit)->get();
-        return response($contents)
-            ->header('x-total-count', $total);
+        return $this->res($contents, $total);
     }
 
     function del(int $id)

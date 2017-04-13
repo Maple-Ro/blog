@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Model\SSLog;
-use App\Model\SSStatic;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
 
 class LogController extends Controller
 {
@@ -32,6 +29,7 @@ class LogController extends Controller
 //        }
 //        SSLog::insert($results);
     }
+
 
     /**
      * for test

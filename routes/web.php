@@ -22,6 +22,10 @@ Route::group(['namespace' => 'front'], function () {
     });
     Route::get('/add', 'LogController@add');
     Route::get('/sum', 'LogController@sum');
+    Route::get('/fetchReactDemo', 'ReactDemoController@fetch');
+    Route::get('/delReactDemo/{id}', 'ReactDemoController@del');
+    Route::post('/editReactDemo', 'ReactDemoController@edit');
+    Route::post('/createReactDemo', 'ReactDemoController@create');
 });
 
 //后台

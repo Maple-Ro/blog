@@ -257,9 +257,16 @@ class ReactDemoController extends Controller
         }
     }
 
-    function fetch()
+    /**
+     * @param int $page
+     * @param int $limit
+     */
+    function fetch(int $page, int $limit)
     {
-        return ReactDemo::all();
+        $total = ReactDemo::count('id');
+        $contents = ReactDemo::forPage($page, $limit)->get();
+        return response($contents)
+            ->header('x-total-count', $total);
     }
 
     function del(int $id)
@@ -270,16 +277,15 @@ class ReactDemoController extends Controller
     /**
      * 更新
      * @param Request $request
+     * @param $id
      */
-    function edit(Request $request)
+    function edit(Request $request, $id)
     {
-        $id = $request->id;
         $r = ReactDemo::where('id', '=', $id);
         $r->name = $request->name;
         $r->email = $request->email;
         $r->website = $request->website;
         $r->save();
-        return 'ok';
     }
 
     /**

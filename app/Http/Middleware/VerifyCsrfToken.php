@@ -13,5 +13,9 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         //
+        '/fetchReactDemo',
+        '/editReactDemo/*',
+        '/createReactDemo',
+        '/delReactDemo/*'
     ];
 }

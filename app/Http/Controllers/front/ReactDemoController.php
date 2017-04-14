@@ -5,6 +5,7 @@ namespace App\Http\Controllers\front;
 use App\Http\Controllers\Controller;
 use App\Model\ReactDemo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ReactDemoController extends Controller
 {
@@ -263,62 +264,66 @@ class ReactDemoController extends Controller
      */
     function fetch(Request $request)
     {
-        $page = $request->_page;
-        $limit = intval($request->_limit);
-        $total = ReactDemo::count('id');
-        $contents = ReactDemo::forPage($page, $limit)->get();// TODO 返回状态判断
-        return $this->res(['total' => $total, 'data' => $contents]);
+        try {
+            $page = $request->_page;
+            $limit = intval($request->_limit);
+            $total = ReactDemo::count('id');
+            $contents = ReactDemo::forPage($page, $limit)->get();// TODO 返回状态判断
+            return $this->res(['total' => $total, 'data' => $contents, 'status' => 200]);
+        } catch (\Exception $e) {
+            return $this->res(['status' => 500]);
+        }
     }
 
     function del(int $id)
     {
         $result = ReactDemo::where('id', '=', $id)->delete();
         if (!!$result) {
-            return $this->res(['code' => 200]);
+            return $this->res(['status' => 200]);
         } else {
-            return $this->res(['code' => 500, 'msg' => 'server error']);
+            return $this->res(['status' => 500, 'msg' => 'server error']);
         }
     }
 
     /**
      * 更新
-     * @param Request $request
      * @param $id
      * @return string
      */
-    function edit(Request $request, $id)
+    function edit($id)
     {
-        $r = ReactDemo::where('id', '=', $id);
-        $r->name = $request->name;
-        $r->email = $request->email;
-        $r->website = $request->website;
-        $result = $r->save();
-        if (!!$result) {
-            return $this->res(['code' => 200]);
-        } else {
-            return $this->res(['code' => 500, 'msg' => 'server error']);
+        try {
+            $contents = json_decode(file_get_contents('php://input'), true);
+            ReactDemo::where('id', '=', $id)->update($contents);
+//            $r->name = $contents->name;
+//            $r->email = $contents->email;
+//            $r->website = $contents->website;
+//        Storage::disk('local')->put('test.log', $rs);
+            return $this->res(['status' => 200]);
+        } catch (\Exception $e) {
+            return $this->res(['status' => 500, 'msg' => 'server error']);
         }
     }
 
     /**
      * 创建
-     * @param Request $request
      * @return string
      */
-    function create(Request $request)
+    function create()
     {
+        $contents = json_decode(file_get_contents('php://input'));
         $r = new ReactDemo();
-        $r->name = $request->name;
-        $r->email = $request->email;
-        $r->website = $request->website;
+        $r->name = $contents->name;
+        $r->email = $contents->email;
+        $r->website = $contents->website;
         //获取数据库已有的最大id值
         $id = ReactDemo::max('id');
         $r->id = $id + 1;
         $result = $r->save();
         if (!!$result) {
-            return $this->res(['code' => 200]);
+            return $this->res(['status' => 200]);
         } else {
-            return $this->res(['code' => 500, 'msg' => 'server error']);
+            return $this->res(['status' => 500, 'msg' => 'server error']);
         }
     }
 }

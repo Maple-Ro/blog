@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Model\ReactDemo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Expr\Instanceof_;
 
 class ReactDemoController extends Controller
 {
@@ -292,12 +293,15 @@ class ReactDemoController extends Controller
     function edit($id)
     {
         try {
-            $contents = json_decode(file_get_contents('php://input'), true);
-            ReactDemo::where('id', '=', $id)->update($contents);
-//            $r->name = $contents->name;
-//            $r->email = $contents->email;
-//            $r->website = $contents->website;
-//        Storage::disk('local')->put('test.log', $rs);
+            $contents = json_decode(file_get_contents('php://input'));
+//            Storage::disk('local')->put('ss.log', $id);
+//            ReactDemo::where('id', $id)->push($contents, true); //upsert会新增一条数据
+            $r = ReactDemo::where('id', '=', $id)->first();
+            $r->name = $contents->name;
+            $r->email = $contents->email;
+            $r->website = $contents->website;
+            $res = $r->update();
+            Storage::disk('local')->put('ss.log', $res);
             return $this->res(['status' => 200]);
         } catch (\Exception $e) {
             return $this->res(['status' => 500, 'msg' => 'server error']);

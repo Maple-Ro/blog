@@ -16,22 +16,6 @@ class IndexController extends Controller
 {
     function index()
     {
-        return view('welcome');
+        return backView('page.index');
     }
-
-    function insert()
-    {
-//        Info::create([
-//            'name' => 'MapleImage',
-//            'email' => 'liutsingluo@163.com',
-//            'description' => 'Hope is a good thing'
-//        ]);
-        return Info::all();
-    }
-//    function insert2(){
-//        $info = new Info;
-//        $info->name = 'John';
-//        $info->save();
-//    }
-
 }

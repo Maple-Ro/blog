@@ -15,7 +15,7 @@ if (!function_exists('homeAssets')) {
 if (!function_exists('backAssets')) {
     function backAssets(string $path, boolean $secure = null)
     {
-        $themes = THEMES_NAME_BACK . DIRECTORY_SEPARATOR;
+        $themes = THEMES_NAME . DIRECTORY_SEPARATOR . Config::get('app.themes_back');
         return app('url')->asset($themes . $path, $secure);
     }
 }

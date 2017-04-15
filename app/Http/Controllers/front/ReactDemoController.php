@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
 class ReactDemoController extends Controller
 {
     //
-    const SOURCE_URL = 'http://localhost:8000/api/users';
 
     /**
      * 插入模拟数据
@@ -271,7 +270,7 @@ class ReactDemoController extends Controller
             $contents = ReactDemo::forPage($page, $limit)->get();// TODO 返回状态判断
             return $this->res(['total' => $total, 'data' => $contents, 'status' => 200]);
         } catch (\Exception $e) {
-            return $this->res(['status' => 500]);
+            return $this->res(['status' => 500, 'total' => 0, 'data' => []]);
         }
     }
 

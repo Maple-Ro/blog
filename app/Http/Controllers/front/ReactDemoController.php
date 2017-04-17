@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Model\ReactDemo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Expr\Instanceof_;
 
 class ReactDemoController extends Controller
 {
@@ -287,24 +286,18 @@ class ReactDemoController extends Controller
 
     /**
      * 更新
-     * @param $id
+     * 注意类型啊！！！！
+     * @param int $id
      * @return string
      */
-    function edit($id)
+    function edit(int $id)
     {
-        try {
-            $contents = json_decode(file_get_contents('php://input'));
-//            Storage::disk('local')->put('ss.log', $id);
-//            ReactDemo::where('id', $id)->push($contents, true); //upsert会新增一条数据
-            $r = ReactDemo::where('id', '=', $id)->first();
-            $r->name = $contents->name;
-            $r->email = $contents->email;
-            $r->website = $contents->website;
-            $res = $r->update();
-            Storage::disk('local')->put('ss.log', $res);
+        $contents = json_decode(file_get_contents('php://input'), true);
+        $res = ReactDemo::where('id', $id)->update($contents, ['upsert' => true]); //update方法第一个参数是数组，upsert:true=>会插入新的记录会起作用，返回修改过的数字
+        if ($res > 0) {
             return $this->res(['status' => 200]);
-        } catch (\Exception $e) {
-            return $this->res(['status' => 500, 'msg' => 'server error']);
+        } else {
+            return $this->res(['status' => 500, 'msg' => '操作失败']);
         }
     }
 
@@ -326,7 +319,7 @@ class ReactDemoController extends Controller
         if (!!$result) {
             return $this->res(['status' => 200]);
         } else {
-            return $this->res(['status' => 500, 'msg' => 'server error']);
+            return $this->res(['status' => 500, 'msg' => '操作失败']);
         }
     }
 }

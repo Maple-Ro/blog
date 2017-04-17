@@ -10,7 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+header('Access-Control-Allow-Origin:' . env('ORIGIN'));
+header('Access-Control-Allow-Methods:POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers:Content-Type, X-Auth-Token, Origin, X-CSRF-TOKEN');
 Route::group(['namespace' => 'front'], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/detail/{id}', 'IndexController@detail');
@@ -24,7 +26,7 @@ Route::group(['namespace' => 'front'], function () {
     Route::get('/sum', 'LogController@sum');
 //    Route::get('/insert', 'ReactDemoController@insert');
     Route::get('/fetchReactDemo', 'ReactDemoController@fetch');
-    Route::get('/delReactDemo/{id}', 'ReactDemoController@del');
+    Route::post('/delReactDemo', 'ReactDemoController@del');
     Route::post('/editReactDemo/{id}', 'ReactDemoController@edit');
     Route::post('/createReactDemo', 'ReactDemoController@create');
 });
@@ -32,6 +34,7 @@ Route::group(['namespace' => 'front'], function () {
 //后台
 Route::group(['namespace' => 'back', 'prefix' => env('APP_BACK')], function () {
     Route::get('/', 'IndexController@index');
+    Route::get('/back', 'IndexController@back');
 //    Route::get('/insert', 'IndexController@insert');
     Route::get('/insert2', 'IndexController@insert2');
     Route::get('/add', 'ArticleController@add');

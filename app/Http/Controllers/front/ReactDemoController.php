@@ -274,8 +274,9 @@ class ReactDemoController extends Controller
         }
     }
 
-    function del(int $id)
+    function del()
     {
+        $id = json_decode(file_get_contents('php://input'));
         $result = ReactDemo::where('id', '=', $id)->delete();
         if (!!$result) {
             return $this->res(['status' => 200]);

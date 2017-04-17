@@ -16,6 +16,6 @@ class VerifyCsrfToken extends BaseVerifier
         '/fetchReactDemo',
         '/editReactDemo/*',
         '/createReactDemo',
-        '/delReactDemo/*'
+        '/delReactDemo'
     ];
 }

@@ -18,4 +18,9 @@ class IndexController extends Controller
     {
         return backView('page.index');
     }
+
+    function back()
+    {
+        return redirect('http://user-dashboard.io');
+    }
 }

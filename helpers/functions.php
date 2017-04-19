@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Storage;
 /**
  * Description:  一些有用的函数
  * User: Endless
@@ -62,5 +63,11 @@ if (!function_exists('callApiServer')) {
             $va = json_decode(json_encode($error));
             return $va;
         }
+    }
+}
+if (!function_exists('debug')) {
+    function debug(string $msg)
+    {
+        Storage::disk('local')->put('debug' . date('Y-m-d') . '.log', $msg);
     }
 }

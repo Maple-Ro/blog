@@ -12,6 +12,11 @@ namespace App\Providers;
 use App\Model\Security\EndlessCrypt;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * 使用SHA256实现的一个HASH加密服务
+ * Class Sha256HashServiceProvider
+ * @package App\Providers
+ */
 class Sha256HashServiceProvider extends ServiceProvider
 {
     /**

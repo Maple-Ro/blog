@@ -36,7 +36,7 @@ class AdminController extends Controller
         $admin->name = trim($request->name);
         $admin->pwd = Hash::make(trim($request->pwd));
         $res = $admin->save();
-        return $this->echo($res);
+        return $this->response($res);
     }
 
     function login()
@@ -51,11 +51,29 @@ class AdminController extends Controller
      */
     function loginSubmit(Request $request): string
     {
-        $name = trim($request->name);
-        $pwd = trim($request->pwd);
-        $hashed_pwd = Admin::where('name', $name)->first()->pwd;
-        $res = Hash::check($pwd, $hashed_pwd);
-        return $this->echo($res);
+        $name = trim($request->username);
+        $pwd = trim($request->password);
+        try {
+            $hashed_pwd = Admin::where('name', $name)->first()->pwd;
+            $res = Hash::check($pwd, $hashed_pwd);
+            if ($res) {
+                return json_encode([
+                    'status' => 200,
+                    'username' => $name,
+                    'success' => true
+                ]);
+            } else {
+                return json_encode([
+                    'status' => 401,
+                    'msg' => 'operation failed'
+                ]);
+            }
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 401,
+                'msg' => 'error'
+            ]);
+        }
     }
 
     /**
@@ -72,7 +90,7 @@ class AdminController extends Controller
      * @param bool $result
      * @return string
      */
-    private function echo (bool $result): string
+    private function response(bool $result): string
     {
         if ($result) {
             return response()->json([
@@ -84,5 +102,12 @@ class AdminController extends Controller
                 'msg' => 'operation failed'
             ]);
         }
+    }
+
+    function info(): string
+    {
+        $data = ['info' => 'welcome'];
+
+        return response()->json(['data' => $data, 'status' => 200, 'success' => true]);
     }
 }

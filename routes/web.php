@@ -11,6 +11,7 @@
 |
 */
 
+//前台
 Route::group(['namespace' => 'front'], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/detail/{id}', 'IndexController@detail');
@@ -27,27 +28,17 @@ Route::group(['namespace' => 'front'], function () {
 
 //后台
 Route::group(['namespace' => 'back', 'prefix' => env('APP_BACK')], function () {
-    header('Access-Control-Allow-Origin:' . env('ORIGIN'));
-    header('Access-Control-Allow-Methods:POST, GET, OPTIONS');
-    header('Access-Control-Allow-Headers:Content-Type, X-Auth-Token, Origin, X-CSRF-TOKEN');
-    /**React测试*/
-    // Route::get('/insert', 'ReactDemoController@insert');
-    Route::get('/fetchReactDemo', 'ReactDemoController@fetch');
-    Route::post('/delReactDemo', 'ReactDemoController@del');
-    Route::post('/editReactDemo/{id}', 'ReactDemoController@edit');
-    Route::post('/createReactDemo', 'ReactDemoController@create');
-
     Route::get('/', 'IndexController@index');
     Route::get('/back', 'IndexController@back');
     /**后台文章管理等*/
-//    Route::get('/insert', 'IndexController@insert');
+    Route::get('/insert', 'IndexController@insert');
     Route::get('/insert2', 'IndexController@insert2');
     Route::get('/add', 'ArticleController@add');
     Route::get('/del/{id}', 'ArticleController@delOne');
     Route::get('/fetch/{id}', 'ArticleController@one');
     /**后台管理员登陆管理等*/
-//    Route::get('/register', 'AdminController@index');
-//    Route::post('/register', 'AdminController@register');
+    Route::get('/register', 'AdminController@index');
+    Route::post('/register', 'AdminController@register');
     Route::get('/login', 'AdminController@login');
     Route::post('/login', 'AdminController@loginSubmit');
     Route::post('/edit', 'AdminController@edit');

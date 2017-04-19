@@ -7,16 +7,18 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form>
+                    <form action="/i/login" method="post">
                         <h1>Login Form</h1>
                         <div>
-                            <input type="text" class="form-control" placeholder="Username" required=""/>
+                            {{csrf_field()}}
+                            <input type="text" class="form-control" placeholder="Username" name="name" required=""/>
                         </div>
                         <div>
-                            <input type="password" class="form-control" placeholder="Password" required=""/>
+                            <input type="password" class="form-control" name="pwd" placeholder="Password" required=""/>
                         </div>
                         <div>
-                            <a class="btn btn-default submit" href="index.html">Log in</a>
+                            <label><input type="submit" value="Login in" class="btn btn-default submit"></label>
+                            <!--<a class="btn btn-default submit" href="index.html">Log in</a>-->
                             <a class="reset_pass" href="#">Lost your password?</a>
                         </div>
 

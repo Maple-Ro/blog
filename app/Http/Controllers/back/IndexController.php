@@ -6,7 +6,7 @@
  * Time: 9:42
  */
 
-namespace App\Http\Controllers\back;
+namespace App\Http\Controllers\Back;
 
 
 use App\Http\Controllers\Controller;

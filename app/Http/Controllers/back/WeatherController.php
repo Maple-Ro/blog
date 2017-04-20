@@ -18,6 +18,7 @@ class WeatherController extends Controller
     function weather(): string
     {
         $results = callThirdApi($this->generateUrl());
+        $results = $results[0];
         $city = $results->location->name;
         $temperature = $results->now->temperature;
         $icon = '//tsing.studio/themes/back/images/3d_60/' . $results->now->code . '.png';

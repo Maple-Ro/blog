@@ -1,4 +1,4 @@
-@extends('errors.error)
+@extends('errors.error')
 @section('title')
     Be right back.
 @endsection

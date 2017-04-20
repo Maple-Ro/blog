@@ -19,7 +19,7 @@ class WeatherController extends Controller
     function weather(): string
     {
         $data = callThirdApi($this->generateUrl());
-        debug($data);
+//        debug($data);
         try {
             $results = $data->results[0];
             $city = $results->location->name;

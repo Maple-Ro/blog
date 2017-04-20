@@ -1,1 +1,2 @@
-<p>个人博客项目，使用Laravel 框架</p>
+# README
+> personal blog project using laravel 5.3+

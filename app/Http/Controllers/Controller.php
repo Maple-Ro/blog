@@ -14,7 +14,7 @@ class Controller extends BaseController
 
     protected function call(string $url, array $params = [])
     {
-        return callApiServer($url, $params);
+        return callThirdApi($url, $params);
     }
 
     /**

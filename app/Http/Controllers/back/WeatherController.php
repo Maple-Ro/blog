@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class WeatherController extends Controller
 {
@@ -18,17 +19,22 @@ class WeatherController extends Controller
     function weather(): string
     {
         $data = callThirdApi($this->generateUrl());
-        $results = $data->results[0];
-        $city = $results->location->name;
-        $temperature = $results->now->temperature;
-        $icon = '//tsing.studio/themes/back/images/3d_60/' . $results->now->code . '.png';
-        return json_encode([
-            'city' => $city,
-            'icon' => $icon,
-            'dateTime' => Carbon::now()->format('Y-m-d H:i:s'),
-            'temperature' => $temperature,
-            'name' => 'Endless'
-        ]);
+        debug($data);
+        try {
+            $results = $data->results[0];
+            $city = $results->location->name;
+            $temperature = $results->now->temperature;
+            $icon = '//tsing.studio/themes/back/images/3d_60/' . $results->now->code . '.png';
+            return json_encode([
+                'city' => $city,
+                'icon' => $icon,
+                'dateTime' => Carbon::now()->format('Y-m-d H:i:s'),
+                'temperature' => $temperature,
+                'name' => 'Endless'
+            ]);
+        } catch (\Exception $e) {
+            return $e->getMessage().' '.$e->getFile().' '.$e->getLine();
+        }
     }
 
     private function generateUrl(): string

@@ -30,6 +30,7 @@ Route::group(['namespace' => 'Back'], function () {
     Route::post('/createReactDemo', 'ReactDemoController@create');
     /**第三方登陆*/
     Route::post('/login', 'AdminController@loginSubmit');
-    Route::get('/siteInfo', 'AdminController@info');
+    Route::get('/info', 'AdminController@info');
+    Route::get('/weather', 'WeatherController@weather');
 });
 

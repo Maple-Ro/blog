@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
+
     /**
      * 注册页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|mixed
@@ -65,13 +66,13 @@ class AdminController extends Controller
             } else {
                 return json_encode([
                     'status' => 401,
-                    'msg' => 'operation failed'
+                    'error' => 'password is wrong!'
                 ]);
             }
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 401,
-                'msg' => 'error'
+                'error' => 'username is not exists!'
             ]);
         }
     }
@@ -85,29 +86,12 @@ class AdminController extends Controller
 
     }
 
-    /**
-     * 公共输出
-     * @param bool $result
-     * @return string
-     */
-    private function response(bool $result): string
-    {
-        if ($result) {
-            return response()->json([
-                'status' => 200
-            ]);
-        } else {
-            return response()->json([
-                'status' => 500,
-                'msg' => 'operation failed'
-            ]);
-        }
-    }
-
     function info(): string
     {
         $data = ['info' => 'welcome'];
 
-        return response()->json(['data' => $data, 'status' => 200, 'success' => true]);
+        return json_encode(['data' => $data, 'status' => 200, 'success' => true]);
     }
+
+
 }

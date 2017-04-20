@@ -18,6 +18,7 @@ class WeatherController extends Controller
 
     function weather(): string
     {
+        dd($this->generateUrl());
         $data = callThirdApi($this->generateUrl());
         dd($data);
         try {

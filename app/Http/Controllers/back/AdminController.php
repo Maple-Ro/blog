@@ -37,9 +37,18 @@ class AdminController extends Controller
         $admin->name = trim($request->name);
         $admin->pwd = Hash::make(trim($request->pwd));
         $res = $admin->save();
-        return $this->response($res);
+        if ($res) {
+            return json_encode([
+                'status' => 200,
+                'success' => true
+            ]);
+        } else {
+            return json_encode([
+                'status' => 401,
+                'error' => 'operation error!'
+            ]);
+        }
     }
-
     function login()
     {
         return backView('page.login');
@@ -54,6 +63,7 @@ class AdminController extends Controller
     {
         $name = trim($request->username);
         $pwd = trim($request->password);
+
         try {
             $hashed_pwd = Admin::where('name', $name)->first()->pwd;
             $res = Hash::check($pwd, $hashed_pwd);
@@ -66,13 +76,13 @@ class AdminController extends Controller
             } else {
                 return json_encode([
                     'status' => 401,
-                    'error' => 'password is wrong!'
+                    'msg' => 'password is wrong!'
                 ]);
             }
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 401,
-                'error' => 'username is not exists!'
+                'msg' => 'username is not exists!'
             ]);
         }
     }

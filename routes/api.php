@@ -31,6 +31,10 @@ Route::group(['namespace' => 'Back'], function () {
     /**第三方登陆*/
     Route::post('/login', 'AdminController@loginSubmit');
     Route::get('/info', 'AdminController@info');
-    Route::get('/weather', 'WeatherController@weather');
+    /**系统运行信息等*/
+    Route::get('/weather', 'DashboardController@weather');
+    Route::get('/os', 'DashboardController@os');
+    Route::get('/card', 'DashboardController@card');
+    Route::get('/browser', 'DashboardController@browser');
 });
 

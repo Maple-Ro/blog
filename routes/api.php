@@ -36,5 +36,9 @@ Route::group(['namespace' => 'Back'], function () {
     Route::get('/os', 'DashboardController@os');
     Route::get('/card', 'DashboardController@card');
     Route::get('/browser', 'DashboardController@browser');
+    /**文章*/
+    Route::get('/article/lists', 'ArticleController@lists');
+    Route::get('/article/create', 'ArticleController@create');
+
 });
 

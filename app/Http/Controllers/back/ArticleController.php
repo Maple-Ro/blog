@@ -122,5 +122,43 @@ class ArticleController extends Controller
             return false;
         }
     }
+
     //TODO 插入新的字段
+    function create(Request $request): string
+    {
+        $random =random_int(1,10000);
+        $title = '测试1';
+        $content = '测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1
+        测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1
+        测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1
+        测试1测试1测试1测试1测试1测试1测试1测试1';
+        $title = str_replace('1', $random, $title);
+        $content = str_replace('1', $random, $content);
+        $instance = new Article();
+        $instance->title = $title;
+        $instance->content = $content;
+        $res = $instance->save();
+       if($res){
+           return json_encode([
+               'status'=>200,
+               'msg'=>'success'
+           ]);
+       }else{
+           return json_encode([
+               'status'=>400,
+               'msg'=>'wrong'
+           ]);
+       }
+    }
+
+    function lists(Request $request)
+    {
+        $page = $request->page;
+        $page_size = intval($request->page_size) ?: 6;
+        $data = Article::forPage($page, $page_size)->get();
+        return json_encode([
+            'status'=>200,
+            'data'=>$data
+        ]);
+    }
 }

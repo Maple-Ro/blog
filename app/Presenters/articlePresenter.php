@@ -1,15 +1,16 @@
 <?php
 namespace App\Presenters;
 
+use App\Model\Article;
 use phpDocumentor\Reflection\Types\Mixed;
 
 class ArticlePresenter
 {
     /**
-     * @param array $data
+     * @param  $data
      * @return string
      */
-    function list(array $data)
+    function list($data)
     {
         $html = '';
         if (empty($data)) {
@@ -18,7 +19,7 @@ class ArticlePresenter
             foreach ($data as $i) {
                 $html .= '<article class="post">
             <h2 class="title">
-                <a href="/detail/' . $i->id . '">
+                <a href="/detail/' . $i->_id . '">
                     ' . $i->title . '</a>
             </h2>
             <div class="entry-content">';
@@ -26,10 +27,7 @@ class ArticlePresenter
             </div>
             <!--左侧日期评论数目统计区域-->
             <div class="meta">
-                <div class="date">
-                    <time datetime="' . $i->date . '" pubdate data-updated="true">' . $i->day . '&nbsp;&nbsp;<span>' . $i->weekday . '</span>, ' . $i->year . '
-                    </time>
-                </div>
+                <div class="date"><span>' . $i->updated_at . '</span></div>
                 <div class="tags">
                 </div>
                 <div class="comments"><a href="#">Comments</a>
@@ -41,7 +39,7 @@ class ArticlePresenter
         return $html;
     }
 
-    function detail(\stdClass $i)
+    function detail(Article $i)
     {
         $html = '';
         if (empty($i)) {
@@ -58,8 +56,7 @@ class ArticlePresenter
             <!--左侧日期评论数目统计区域-->
             <div class="meta">
                 <div class="date">
-                    <time datetime="' . $i->date . '" pubdate data-updated="true">' . $i->day . '&nbsp;&nbsp;<span>' . $i->weekday . '</span>, ' . $i->year . '
-                    </time>
+                    <span>' . $i->updated_at . '</span>
                 </div>
                 <div class="tags">
                 </div>

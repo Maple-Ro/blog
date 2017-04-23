@@ -14,6 +14,7 @@
 //前台
 Route::group(['namespace' => 'front'], function () {
     Route::get('/', 'IndexController@index');
+    Route::get('/article/{page}', 'IndexController@list');
     Route::get('/detail/{id}', 'IndexController@detail');
     Route::get('/test', 'IndexController@test');
     Route::get('/cls', function () {

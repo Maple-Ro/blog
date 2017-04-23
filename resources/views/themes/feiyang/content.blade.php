@@ -6,10 +6,11 @@
 @section('content')
     <div id="content" class="inner">
         <!--文章列表-->
-        {!! $article->list($data) !!}
-        <nav id="pagenavi">
-            <a href="#" class="next">Next</a>
-            <div class="center"><a href="#">Blog Archives</a></div>
-        </nav>
+        @if(empty($data))
+            <p>还未发表文章</p>
+        @else
+            {!! $article->list($data) !!}
+            {!! $links !!}
+        @endif
     </div>
 @endsection

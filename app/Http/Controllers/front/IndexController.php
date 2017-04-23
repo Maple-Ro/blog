@@ -10,30 +10,41 @@ namespace app\Http\Controllers\front;
 
 
 use App\Http\Controllers\Controller;
+use App\Model\Article;
+use Illuminate\View\View;
 
 class IndexController extends Controller
 {
-    public function index()
+    /**
+     * @return View
+     */
+    public function index(): View
     {
-        $r = $this->call('/web/article_list');
-        if ($r->code !== 200) {
-            abort(503);
-        } else {
-            $data = $r->data;
-            return frontView('content')->with(compact(['data']));
-        }
+        return $this->showList('/article', 1);
     }
 
-    function detail($id)
+    function list(int $page): View
     {
-        $r = $this->call('/web/article_content', ['id' => $id]);
-        if ($r->code != 200) {
-            abort(404);
-        } else {
-            $data = $r->data;
-            return frontView('detail')->with(compact(['data']));
-        }
+        return $this->showList('/article', $page);
     }
+
+    private function showList(string $url, int $page, int $limit = 6): View
+    {
+        $total = Article::count('_id') / $limit + 1;
+        $data = Article::forPage($page, $limit)->get();
+        $links = pagination($url, $page, $total);
+        return frontView('content')->with(compact(['data', 'links']));
+    }
+
+    function detail(string $id)
+    {
+        $data = Article::find($id);
+        if (empty($data)) {
+            abort(404);
+        }
+            return frontView('detail')->with(compact(['data']));
+    }
+
     public function test()
     {
         $seedData = [

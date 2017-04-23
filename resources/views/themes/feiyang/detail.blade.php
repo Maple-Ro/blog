@@ -7,9 +7,5 @@
     <div id="content" class="inner">
         <!--文章列表-->
         {!! $article->detail($data) !!}
-        <nav id="pagenavi">
-            <a href="#" class="next">Next</a>
-            <div class="center"><a href="#">Blog Archives</a></div>
-        </nav>
     </div>
 @endsection

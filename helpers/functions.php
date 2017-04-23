@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Storage;
+
 /**
  * Description:  一些有用的函数
  * User: Endless
@@ -91,5 +92,25 @@ if (!function_exists('debug')) {
     function debug(string $msg)
     {
         Storage::disk('local')->put('debug' . date('Y-m-d') . '.log', $msg);
+    }
+}
+if (!function_exists('pagination')) {
+    function pagination(string $url, int $page, int $total): string
+    {
+        $html = '<nav id="pagenavi">';
+        if ($page === $total) {
+            if ($page !== 1) {
+                $html .= '<a href="' . $url . '/' . ($page - 1) . '" class="prev">Prev</a>';
+            }
+        } else {
+            if ($page === 1) {
+                $html .= '<a href="' . $url . '/' . ($page + 1) . '" class="next">Next</a>';
+            } else {
+                $html .= '<a href="' . $url . '/' . ($page - 1) . '" class="prev">Prev</a>
+            <a href="' . $url . '/' . ($page + 1) . '" class="next">Next</a>';
+            }
+        }
+        $html .= '</nav>';
+        return $html;
     }
 }

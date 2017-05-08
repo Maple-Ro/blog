@@ -5,7 +5,7 @@
  * Date: 2017/4/11 0011
  * Time: 17:51
  */
-require './vendor/autoload.php';
+require '/www/blog/vendor/autoload.php';
 $dir = '/var/log/';
 $client = new MongoDB\Client();
 $blog = $client->blog;

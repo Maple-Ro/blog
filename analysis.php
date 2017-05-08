@@ -14,9 +14,7 @@ $date_log = $blog->shadowsocks_date_log;
 $error_log = $blog->error_log;
 //读取/var/log目录中以shadowsocks.log开头的文件名字
 $all_log_files = allFiles($dir);
-var_dump($all_log_files);
 foreach ($all_log_files as $i) {
-
     $k = substr($i, 16);
     $res = $date_log->findOne(['date' => $k]);
     if ($res === null) {//无记录，处理数据，开启事务，写入数据
@@ -54,8 +52,12 @@ function handleData(\MongoDB\Collection $static_log, \MongoDB\Collection $log, s
             $results[$i]['date'] = substr($v, 0, 19);
             $c_c = strpos($v, 'connecting') + 11;
             $site = substr($v, $c_c);
-            list($site, $ip) = explode("from", $site);
-            $results[$i]['site'] = trim($site);
+//            $res = explode('from', $site);
+//            file_put_contents('xx2.log', implode("\n", $res), FILE_APPEND);
+            list($site, $ip) = explode('from', $site);
+//            $res = mb_detect_encoding($site, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
+//            var_dump($res);
+            $results[$i]['site'] = mb_convert_encoding(trim($site), "UTF-8","ASCII");
             $results[$i]['ip'] = substr(trim($ip), 0, strpos(trim($ip), ":"));
             $results[$i]['created_at'] = \Carbon\Carbon::now()->toDateTimeString();
             $results[$i]['updated_at'] = \Carbon\Carbon::now()->toDateTimeString();
@@ -66,7 +68,11 @@ function handleData(\MongoDB\Collection $static_log, \MongoDB\Collection $log, s
 //筛选出同一ip的数量
     $results2 = [];
     foreach ($results as $k => $v) {
-        $results2[$v['ip']] += 1;
+        if(!empty($results2[$v['ip']])){
+            $results2[$v['ip']] += 1;
+        }else{
+            $results2[$v['ip']] = 1;
+        }
     }
     $results3 = [];
     $j = 0;

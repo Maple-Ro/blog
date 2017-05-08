@@ -14,9 +14,9 @@ $date_log = $blog->shadowsocks_date_log;
 $error_log = $blog->error_log;
 //读取/var/log目录中以shadowsocks.log开头的文件名字
 $all_log_files = allFiles($dir);
-
+var_dump($all_log_files);
 foreach ($all_log_files as $i) {
-    var_dump($i);
+
     $k = substr($i, 16);
     $res = $date_log->findOne(['date' => $k]);
     if ($res === null) {//无记录，处理数据，开启事务，写入数据

@@ -16,6 +16,7 @@ $error_log = $blog->error_log;
 $all_log_files = allFiles($dir);
 
 foreach ($all_log_files as $i) {
+    var_dump($i);
     $k = substr($i, 16);
     $res = $date_log->findOne(['date' => $k]);
     if ($res === null) {//无记录，处理数据，开启事务，写入数据

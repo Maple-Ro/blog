@@ -13,6 +13,6 @@ use Jenssegers\Mongodb\Eloquent\Model as Moloquent;
 class SSLog extends Moloquent
 {
     protected $connection = 'mongodb';
-    protected $collection = 'sslog';
+    protected $collection = 'shadowsocks_log';
     protected $primaryKey = '_id';
 }

@@ -13,6 +13,6 @@ use Jenssegers\Mongodb\Eloquent\Model as Moloquent;
 class SSStatic extends Moloquent
 {
     protected $connection = 'mongodb';
-    protected $collection = 'ssstatic';
+    protected $collection = 'shadowsocks_static_log';
     protected $primaryKey = '_id';
 }

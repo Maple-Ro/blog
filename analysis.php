@@ -17,7 +17,7 @@ $all_log_files = allFiles($dir);
 foreach ($all_log_files as $i) {
     $k = substr($i, 16);
     $res = $date_log->findOne(['date' => $k]);
-    if ($res === null) {//无记录，处理数据，开启事务，写入数据
+    if ($res === null&& $k != \Carbon\Carbon::now()->format('Ymd')) { //无记录且不是当天记录，处理数据，开启事务，写入数据
         try {
             handleData($blog->shadowsocks_static_log, $blog->shadowsocks_log, $dir . $i);
         } catch (\Exception $e) {

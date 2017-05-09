@@ -6,6 +6,7 @@
  * Time: 17:51
  */
 require '/www/blog/vendor/autoload.php';
+//require '/media/sf_b/blog/vendor/autoload.php';
 $dir = '/var/log/';
 $client = new MongoDB\Client();
 $blog = $client->blog;

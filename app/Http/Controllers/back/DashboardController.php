@@ -9,9 +9,9 @@
 namespace App\Http\Controllers\Back;
 
 
+use App\Model\SSLog;
 use App\Model\SSStatic;
 use Carbon\Carbon;
-use Hamcrest\Text\SubstringMatcher;
 
 class DashboardController
 {
@@ -146,15 +146,51 @@ class DashboardController
         ]);
     }
 
-    function connectingInfo()
+    /**
+     * @deprecated
+     * 统计每个ip的访问次数
+     * @return array
+     */
+    function connectingInfo(): array
     {
-        $res = SSStatic::groupBy('ip')->raw(function ($q){
-            return $q->find('ip')->sum('num');
-        })->pluck('num', 'ip');
-        return $res;
-        $results = [];
-        foreach ($res as $k=>$v){
-
+        $res = SSStatic::raw(function ($collection) {
+            return $collection->aggregate([
+                [
+                    '$group' => [
+                        '_id' => '$ip',
+                        'count' => [
+                            '$sum' => '$num'
+                        ]
+                    ]
+                ]
+            ]);
+        })->toArray();
+        $result = [];
+        foreach ($res as $k => $v) {
+            if (!!$v['_id']) {
+                $result[$k]['ip'] = $v['_id'];
+                $result[$k]['count'] = $v['count'];
+            }
         }
+        return $result;
+    }
+
+    /**
+     * 统计每个ip的访问次数
+     * @return array
+     */
+    function connectDetail():array {
+        return SSLog::raw(function ($collection) {
+            return $collection->aggregate([
+                [
+                    '$group' => [
+                        '_id' => '$ip',
+                        'count' => [
+                            '$sum' => 1
+                        ]
+                    ]
+                ]
+            ]);
+        })->toArray();
     }
 }

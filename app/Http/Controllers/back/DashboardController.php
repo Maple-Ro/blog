@@ -9,11 +9,12 @@
 namespace App\Http\Controllers\Back;
 
 
+use App\Http\Controllers\Controller;
 use App\Model\SSLog;
 use App\Model\SSStatic;
 use Carbon\Carbon;
 
-class DashboardController
+class DashboardController extends Controller
 {
     /**
      * 天气信息
@@ -179,7 +180,8 @@ class DashboardController
      * 统计每个ip的访问次数
      * @return array
      */
-    function connectDetail():array {
+    function connectDetail(): array
+    {
         return SSLog::raw(function ($collection) {
             return $collection->aggregate([
                 [

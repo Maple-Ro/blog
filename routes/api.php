@@ -37,6 +37,8 @@ Route::group(['namespace' => 'Back'], function () {
     Route::get('/browser', 'DashboardController@browser');
     Route::get('/connecting-info', 'DashboardController@connectingInfo');
     Route::get('/connecting-detail', 'DashboardController@connectDetail');
+    Route::get('/connecting-date', 'DashboardController@dateLog');
+    Route::get('/ip-info/{ip}', 'DashboardController@eachIpLog');
 
     /**文章*/
     Route::get('/article/lists', 'ArticleController@lists');

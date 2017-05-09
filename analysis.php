@@ -6,6 +6,7 @@
  * Time: 17:51
  */
 require '/www/blog/vendor/autoload.php';
+const IP_API = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=';
 //require '/media/sf_b/blog/vendor/autoload.php';
 $dir = '/var/log/';
 $client = new MongoDB\Client();
@@ -53,11 +54,7 @@ function handleData(\MongoDB\Collection $static_log, \MongoDB\Collection $log, s
             $results[$i]['date'] = substr($v, 0, 19);
             $c_c = strpos($v, 'connecting') + 11;
             $site = substr($v, $c_c);
-//            $res = explode('from', $site);
-//            file_put_contents('xx2.log', implode("\n", $res), FILE_APPEND);
             list($site, $ip) = explode('from', $site);
-//            $res = mb_detect_encoding($site, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
-//            var_dump($res);
             $results[$i]['site'] = mb_convert_encoding(trim($site), "UTF-8","ASCII");
             $results[$i]['ip'] = substr(trim($ip), 0, strpos(trim($ip), ":"));
             $results[$i]['created_at'] = \Carbon\Carbon::now()->toDateTimeString();
@@ -78,12 +75,18 @@ function handleData(\MongoDB\Collection $static_log, \MongoDB\Collection $log, s
     $results3 = [];
     $j = 0;
     foreach ($results2 as $k => $v) {
-        $results3[$j]['ip'] = $k;
-        $results3[$j]['num'] = $v;
-        $results3[$j]['created_at'] = \Carbon\Carbon::now()->toDateTimeString();
-        $results3[$j]['updated_at'] = \Carbon\Carbon::now()->toDateTimeString();
-        $j++;
+       if(!empty($k)){
+           $results3[$j]['ip'] = $k;
+           $results3[$j]['num'] = $v;
+           $results3[$j]['created_at'] = \Carbon\Carbon::now()->toDateTimeString();
+           $results3[$j]['updated_at'] = \Carbon\Carbon::now()->toDateTimeString();
+           $j++;
+       }
     }
+//    foreach ($results3 as $kk=>$vv){
+//        $addr = json_decode(file_get_contents(IP_API . $vv['ip']));
+//        $results3[$kk]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
+//    }
 
     $static_log->insertMany($results3);
 }

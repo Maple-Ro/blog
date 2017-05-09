@@ -10,12 +10,16 @@ namespace App\Http\Controllers\Back;
 
 
 use App\Http\Controllers\Controller;
+use App\Model\SSD;
 use App\Model\SSLog;
 use App\Model\SSStatic;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
+    const IP_API = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=';
+//    const IP_API = 'http://ip.dreamlist.cc/api/?ip=';
+
     /**
      * 天气信息
      * @return string
@@ -152,7 +156,7 @@ class DashboardController extends Controller
      * 统计每个ip的访问次数
      * @return array
      */
-    function connectingInfo(): array
+    function connectingInfo(): string
     {
         $res = SSStatic::raw(function ($collection) {
             return $collection->aggregate([
@@ -171,18 +175,24 @@ class DashboardController extends Controller
             if (!!$v['_id']) {
                 $result[$k]['ip'] = $v['_id'];
                 $result[$k]['count'] = $v['count'];
+                $addr = json_decode(file_get_contents(self::IP_API . $v['_id']));
+                $result[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
             }
         }
-        return $result;
+        return json_encode([
+            'status'=>200,
+            'success' => true,
+            'data'=>$result
+        ]);
     }
 
     /**
      * 统计每个ip的访问次数
      * @return array
      */
-    function connectDetail(): array
+    function connectDetail(): string
     {
-        return SSLog::raw(function ($collection) {
+        $res = SSLog::raw(function ($collection) {
             return $collection->aggregate([
                 [
                     '$group' => [
@@ -194,5 +204,25 @@ class DashboardController extends Controller
                 ]
             ]);
         })->toArray();
+        foreach ($res as $k => $v) {
+                $addr = json_decode(file_get_contents(self::IP_API . $v['_id']));
+                $res[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
+        }
+        return json_encode([
+            'status'=>200,
+            'success' => true,
+            'data'=>$res
+        ]);
     }
+
+    function dateLog(): array
+    {
+        return SSD::all()->toArray();
+    }
+
+    function eachIpLog(string $ip): array
+    {
+        return SSLog::where('ip', $ip)->get()->toArray();
+    }
+
 }

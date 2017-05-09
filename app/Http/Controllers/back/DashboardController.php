@@ -14,6 +14,7 @@ use App\Model\SSD;
 use App\Model\SSLog;
 use App\Model\SSStatic;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
@@ -158,26 +159,31 @@ class DashboardController extends Controller
      */
     function connectingInfo(): string
     {
-        $res = SSStatic::raw(function ($collection) {
-            return $collection->aggregate([
-                [
-                    '$group' => [
-                        '_id' => '$ip',
-                        'count' => [
-                            '$sum' => '$num'
+        if(!Cache::has('connect-info')&&empty(Cache::get('connect-info'))){
+            $res = SSStatic::raw(function ($collection) {
+                return $collection->aggregate([
+                    [
+                        '$group' => [
+                            '_id' => '$ip',
+                            'count' => [
+                                '$sum' => '$num'
+                            ]
                         ]
                     ]
-                ]
-            ]);
-        })->toArray();
-        $result = [];
-        foreach ($res as $k => $v) {
-            if (!!$v['_id']) {
-                $result[$k]['ip'] = $v['_id'];
-                $result[$k]['count'] = $v['count'];
-                $addr = json_decode(file_get_contents(self::IP_API . $v['_id']));
-                $result[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
+                ]);
+            })->toArray();
+            $result = [];
+            foreach ($res as $k => $v) {
+                if (!!$v['_id']) {
+                    $result[$k]['ip'] = $v['_id'];
+                    $result[$k]['count'] = $v['count'];
+                    $addr = json_decode(file_get_contents(self::IP_API . $v['_id']));
+                    $result[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
+                }
             }
+            Cache::put('connect-info', $result,12*60);
+        }else{
+            $result = Cache::get('connect-info');
         }
         return json_encode([
             'status'=>200,

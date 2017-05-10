@@ -176,7 +176,7 @@ class DashboardController extends Controller
                 if (!!$v['_id']) {
                     $result[$k]['ip'] = $v['_id'];
                     $result[$k]['count'] = $v['count'];
-                    $addr = json_decode(file_get_contents(htmlspecialchars_decode(self::IP_API . $v['_id'])));
+                    $addr = json_decode(file_get_contents(htmlspecialchars_decode(self::IP_API ). $v['_id']));
                     $result[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
                 }
             }
@@ -209,15 +209,16 @@ class DashboardController extends Controller
                 ]
             ]);
         })->toArray();
-        foreach ($res as $k => $v) {
-                $addr = json_decode(file_get_contents(htmlspecialchars_decode(self::IP_API ). $v['_id']));
-                $res[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
-        }
-        return json_encode([
-            'status'=>200,
-            'success' => true,
-            'data'=>$res
-        ]);
+//        foreach ($res as $k => $v) {
+//                $addr = json_decode(file_get_contents(htmlspecialchars_decode(self::IP_API ). $v['_id']));
+//                $res[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
+//        }
+//        return json_encode([
+//            'status'=>200,
+//            'success' => true,
+//            'data'=>$res
+//        ]);
+        return html_entity_decode(self::IP_API);
     }
 
     function dateLog(): array

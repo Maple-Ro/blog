@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
-    const IP_API = "http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=";
+    const IP_API = "http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;ip=";
 //    const IP_API = 'http://ip.dreamlist.cc/api/?ip=';
 
     /**

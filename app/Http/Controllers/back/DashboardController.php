@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
-    const IP_API = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=';
+    const IP_API = "http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=";
 //    const IP_API = 'http://ip.dreamlist.cc/api/?ip=';
 
     /**
@@ -153,9 +153,8 @@ class DashboardController extends Controller
     }
 
     /**
-     * @deprecated
      * 统计每个ip的访问次数
-     * @return array
+     * @return string
      */
     function connectingInfo(): string
     {
@@ -177,7 +176,7 @@ class DashboardController extends Controller
                 if (!!$v['_id']) {
                     $result[$k]['ip'] = $v['_id'];
                     $result[$k]['count'] = $v['count'];
-                    $addr = json_decode(file_get_contents(self::IP_API . $v['_id']));
+                    $addr = json_decode(file_get_contents(htmlspecialchars(self::IP_API . $v['_id'])));
                     $result[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
                 }
             }
@@ -211,7 +210,7 @@ class DashboardController extends Controller
             ]);
         })->toArray();
         foreach ($res as $k => $v) {
-                $addr = json_decode(file_get_contents(self::IP_API . $v['_id']));
+                $addr = json_decode(file_get_contents(htmlspecialchars(self::IP_API ). $v['_id']));
                 $res[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
         }
         return json_encode([

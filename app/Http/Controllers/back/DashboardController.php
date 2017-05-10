@@ -18,8 +18,7 @@ use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
-    const IP_API = "http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;ip=";
-//    const IP_API = 'http://ip.dreamlist.cc/api/?ip=';
+    const IP_API = "http://ip-api.com/php/";
 
     /**
      * 天气信息
@@ -173,17 +172,23 @@ class DashboardController extends Controller
             })->toArray();
             $result = [];
             foreach ($res as $k => $v) {
+                sleep(1);
                 if (!!$v['_id']) {
                     $result[$k]['ip'] = $v['_id'];
                     $result[$k]['count'] = $v['count'];
-                    $addr = json_decode(file_get_contents(html_entity_decode(self::IP_API ). $v['_id']));
-                    $result[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
+                    $addr = unserialize(file_get_contents(self::IP_API . $v['_id']));
+                    if($addr['status']==='success'){
+                        $result[$k]['addr'] = $addr;
+                    }else{
+                        $result[$k]['addr'] = [];
+                    }
                 }
             }
             Cache::put('connect-info', $result,12*60);
         }else{
             $result = Cache::get('connect-info');
         }
+
         return json_encode([
             'status'=>200,
             'success' => true,
@@ -209,16 +214,15 @@ class DashboardController extends Controller
                 ]
             ]);
         })->toArray();
-        foreach ($res as $k => $v) {
-                $addr = json_decode(file_get_contents(html_entity_decode(self::IP_API ). $v['_id']));
-                $res[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
-        }
+//        foreach ($res as $k => $v) {
+//                $addr = json_decode(file_get_contents(html_entity_decode(self::IP_API ). $v['_id']));
+//                $res[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
+//        }
         return json_encode([
             'status'=>200,
             'success' => true,
             'data'=>$res
         ]);
-//        return html_entity_decode(self::IP_API);
     }
 
     function dateLog(): array

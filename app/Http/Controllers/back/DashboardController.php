@@ -231,7 +231,7 @@ class DashboardController extends Controller
             $res = SSD::all()->toArray();
             Cache::put('connect-date', $res, 12 * 60);
         } else {
-            $res = Cache::get('connect-info');
+            $res = Cache::get('connect-date');
         }
         return $res;
     }

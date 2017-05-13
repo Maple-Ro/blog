@@ -227,7 +227,13 @@ class DashboardController extends Controller
 
     function dateLog(): array
     {
-        return SSD::all()->toArray();
+        if (!Cache::has('connect-date') && empty(Cache::get('connect-date'))) {
+            $res = SSD::all()->toArray();
+            Cache::put('connect-date', $res, 12 * 60);
+        } else {
+            $res = Cache::get('connect-date');
+        }
+        return $res;
     }
 
     function eachIpLog(string $ip): array

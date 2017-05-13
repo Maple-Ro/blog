@@ -2,7 +2,6 @@
 namespace App\Presenters;
 
 use App\Model\Article;
-use phpDocumentor\Reflection\Types\Mixed;
 
 class ArticlePresenter
 {

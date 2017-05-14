@@ -5,9 +5,7 @@
  * Date: 2017/4/11 0011
  * Time: 17:51
  */
-require '/www/blog/vendor/autoload.php';
-const IP_API = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=';
-//require '/media/sf_b/blog/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 $dir = '/var/log/';
 $client = new MongoDB\Client();
 $blog = $client->blog;

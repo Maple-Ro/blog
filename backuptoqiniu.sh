@@ -42,4 +42,5 @@ echo "upload ok"
 
 # 清理备份文件
 rm -rf $BACKUP_DIR
+rm -rf $BACKUP_SRC/$BACKUP_FILENAME
 echo "backup clean done"

@@ -241,4 +241,40 @@ class DashboardController extends Controller
         return SSLog::where('ip', $ip)->get()->toArray();
     }
 
+    function chart():string{
+        if(!Cache::has('chart')){
+            $res = SSStatic::raw(function ($collection) {
+                return $collection->aggregate([
+                    [
+                        '$group' => [
+                            '_id' => '$ip',
+                            'count' => [
+                                '$sum' => '$num'
+                            ]
+                        ]
+                    ]
+                ]);
+            })->toArray();
+            $result = [];
+            foreach ($res as $k => $v) {
+                if (!!$v['_id']&& $v['count'] > 1000) {
+                    $addr = unserialize(file_get_contents(self::IP_API . $v['_id']));
+                    array_push($result, [
+                        'ip'=>$v['_id'],
+                        'count'=>$v['count'],
+                        'addr'=>$addr,
+                    ]);
+                }
+            }
+            $data = $result;
+            Cache::put('chart', $result, 24*60);
+        }else{
+            $data = Cache::get('chart');
+        }
+        return json_encode([
+            'status'=>200,
+            'data'=>$data
+        ]);
+    }
+
 }

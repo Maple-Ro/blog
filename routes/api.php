@@ -35,6 +35,7 @@ Route::group(['namespace' => 'Back'], function () {
     Route::get('/os', 'DashboardController@os');
     Route::get('/card', 'DashboardController@card');
     Route::get('/browser', 'DashboardController@browser');
+    Route::get('/chart', 'DashboardController@chart');
     Route::get('/connecting-info', 'DashboardController@connectingInfo');
     Route::get('/connecting-detail', 'DashboardController@connectDetail');
     Route::get('/connecting-date', 'DashboardController@dateLog');

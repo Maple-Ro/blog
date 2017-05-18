@@ -6,6 +6,7 @@
  * Time: 17:51
  */
 require __DIR__ . '/vendor/autoload.php';
+const IP_API = "http://ip-api.com/php/";
 $dir = '/var/log/';
 $client = new MongoDB\Client();
 $blog = $client->blog;
@@ -17,7 +18,7 @@ $all_log_files = allFiles($dir);
 foreach ($all_log_files as $i) {
     $k = substr($i, 16);
     $res = $date_log->findOne(['date' => $k]);
-    if ($res === null&& $k != \Carbon\Carbon::now()->format('Ymd')) { //无记录且不是当天记录，处理数据，开启事务，写入数据
+    if ($res === null && $k != \Carbon\Carbon::now()->format('Ymd')) { //无记录且不是当天记录，处理数据，开启事务，写入数据
         try {
             handleData($blog->shadowsocks_static_log, $blog->shadowsocks_log, $dir . $i);
         } catch (\Exception $e) {
@@ -26,7 +27,7 @@ foreach ($all_log_files as $i) {
                 'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
                 'updated_at' => \Carbon\Carbon::now()->toDateTimeString()
             ]);
-        }catch (\Error $e){
+        } catch (\Error $e) {
             $error_log->insertOne([
                 'date' => $e->getMessage(),
                 'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
@@ -53,7 +54,7 @@ function handleData(\MongoDB\Collection $static_log, \MongoDB\Collection $log, s
             $c_c = strpos($v, 'connecting') + 11;
             $site = substr($v, $c_c);
             list($site, $ip) = explode('from', $site);
-            $results[$i]['site'] = mb_convert_encoding(trim($site), "UTF-8","ASCII");
+            $results[$i]['site'] = mb_convert_encoding(trim($site), "UTF-8", "ASCII");
             $results[$i]['ip'] = substr(trim($ip), 0, strpos(trim($ip), ":"));
             $results[$i]['created_at'] = \Carbon\Carbon::now()->toDateTimeString();
             $results[$i]['updated_at'] = \Carbon\Carbon::now()->toDateTimeString();
@@ -64,27 +65,27 @@ function handleData(\MongoDB\Collection $static_log, \MongoDB\Collection $log, s
 //筛选出同一ip的数量
     $results2 = [];
     foreach ($results as $k => $v) {
-        if(!empty($results2[$v['ip']])){
+        if (!empty($results2[$v['ip']])) {
             $results2[$v['ip']] += 1;
-        }else{
+        } else {
             $results2[$v['ip']] = 1;
         }
     }
     $results3 = [];
     $j = 0;
     foreach ($results2 as $k => $v) {
-       if(!empty($k)){
-           $results3[$j]['ip'] = $k;
-           $results3[$j]['num'] = $v;
-           $results3[$j]['created_at'] = \Carbon\Carbon::now()->toDateTimeString();
-           $results3[$j]['updated_at'] = \Carbon\Carbon::now()->toDateTimeString();
-           $j++;
-       }
+        if (!empty($k)) {
+            $results3[$j]['ip'] = $k;
+            $results3[$j]['num'] = $v;
+            $addr = unserialize(file_get_contents(IP_API . $k));
+            $results3[$j]['city'] = $addr['city'];
+            $results3[$j]['lon'] = $addr['lon'];
+            $results3[$j]['lat'] = $addr['lat'];
+            $results3[$j]['created_at'] = \Carbon\Carbon::now()->toDateTimeString();
+            $results3[$j]['updated_at'] = \Carbon\Carbon::now()->toDateTimeString();
+            $j++;
+        }
     }
-//    foreach ($results3 as $kk=>$vv){
-//        $addr = json_decode(file_get_contents(IP_API . $vv['ip']));
-//        $results3[$kk]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
-//    }
 
     $static_log->insertMany($results3);
 }

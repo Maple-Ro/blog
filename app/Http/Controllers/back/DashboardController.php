@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Back;
 
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use App\Model\SSD;
 use App\Model\SSLog;
 use App\Model\SSStatic;
@@ -157,7 +158,7 @@ class DashboardController extends Controller
      */
     function connectingInfo(): string
     {
-        if(!Cache::has('connect-info')&&empty(Cache::get('connect-info'))){
+        if (!Cache::has('connect-info') && empty(Cache::get('connect-info'))) {
             $res = SSStatic::raw(function ($collection) {
                 return $collection->aggregate([
                     [
@@ -177,22 +178,22 @@ class DashboardController extends Controller
                     $result[$k]['ip'] = $v['_id'];
                     $result[$k]['count'] = $v['count'];
                     $addr = unserialize(file_get_contents(self::IP_API . $v['_id']));
-                    if($addr['status']==='success'){
+                    if ($addr['status'] === 'success') {
                         $result[$k]['addr'] = $addr;
-                    }else{
+                    } else {
                         $result[$k]['addr'] = [];
                     }
                 }
             }
-            Cache::put('connect-info', $result,12*60);
-        }else{
+            Cache::put('connect-info', $result, 12 * 60);
+        } else {
             $result = Cache::get('connect-info');
         }
 
         return json_encode([
-            'status'=>200,
+            'status' => 200,
             'success' => true,
-            'data'=>$result
+            'data' => $result
         ]);
     }
 
@@ -219,9 +220,9 @@ class DashboardController extends Controller
 //                $res[$k]['addr'] = $addr->country . ' ' . $addr->province . ' ' . $addr->city;
 //        }
         return json_encode([
-            'status'=>200,
+            'status' => 200,
             'success' => true,
-            'data'=>$res
+            'data' => $res
         ]);
     }
 
@@ -241,8 +242,9 @@ class DashboardController extends Controller
         return SSLog::where('ip', $ip)->get()->toArray();
     }
 
-    function chart():string{
-        if(!Cache::has('chart')){
+    function chart(): string
+    {
+        if (!Cache::has('chart')) {
             $res = SSStatic::raw(function ($collection) {
                 return $collection->aggregate([
                     [
@@ -257,24 +259,72 @@ class DashboardController extends Controller
             })->toArray();
             $result = [];
             foreach ($res as $k => $v) {
-                if (!!$v['_id']&& $v['count'] > 1000) {
+                if (!!$v['_id'] && $v['count'] > 1000) {
                     $addr = unserialize(file_get_contents(self::IP_API . $v['_id']));
                     array_push($result, [
-                        'ip'=>$v['_id'],
-                        'count'=>$v['count'],
-                        'addr'=>$addr,
+                        'ip' => $v['_id'],
+                        'count' => $v['count'],
+                        'addr' => $addr,
                     ]);
                 }
             }
             $data = $result;
-            Cache::put('chart', $result, 24*60);
-        }else{
+            Cache::put('chart', $result, 24 * 60);
+        } else {
             $data = Cache::get('chart');
         }
         return json_encode([
-            'status'=>200,
-            'data'=>$data
+            'status' => 200,
+            'data' => $data
         ]);
     }
 
+    /**
+     * 输出显示对应使用ss服务的地址信息
+     * TODO mongodb 分组查询
+     * @return string
+     */
+    function map()
+    {
+        if (!Cache::has('map')) {
+            $res = SSStatic::raw(function ($collection) {
+                return $collection->aggregate([
+                    [
+                        '$group' => [
+                            '_id' =>[
+                                'city'=>'$city',
+                                'lon'=>'$lon',
+                                'lat'=>'$lat'
+                            ],
+                            'count' => [
+                                '$sum' => '$num'
+                            ]
+                        ]
+                    ]
+                ]);
+            })->toArray();
+            $result = [];
+            foreach ($res as $k=>$v){
+                $result[$k]['city'] = $v['_id']['city'];
+                $result[$k]['lon'] = $v['_id']['lon'];
+                $result[$k]['lat'] = $v['_id']['lat'];
+                $result[$k]['count'] = $v['count'];
+            }
+//        $res = DB::table('shadowsocks_static_log')
+//            ->select('city', 'lon', 'lat', DB::raw('sum(num) as total'))
+//            ->groupBy('city')
+//            ->orderBy('total', 'desc')
+//            ->get()
+//        ->toArray();
+            $data = $result;
+            Cache::put('map', $result, 24 * 60);
+        } else {
+            $data = Cache::get('map');
+        }
+        return json_encode($data);
+//        return json_encode([
+//            'status' => 200,
+//            'data' => $data
+//        ]);
+    }
 }

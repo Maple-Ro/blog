@@ -94,6 +94,12 @@ if (!function_exists('debug')) {
         Storage::disk('local')->put('debug' . date('Y-m-d') . '.log', $msg);
     }
 }
+if (!function_exists('app_info')) {
+    function app_info(string $msg)
+    {
+        Storage::disk('local')->put('info' . date('Y-m-d') . '.log', $msg);
+    }
+}
 if (!function_exists('pagination')) {
     function pagination(string $url, int $page, int $total): string
     {

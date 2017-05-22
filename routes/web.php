@@ -24,7 +24,6 @@ Route::group(['namespace' => 'front'], function () {
     });
     Route::get('/add', 'LogController@add');
     Route::get('/sum', 'LogController@sum');
-
 });
 
 //后台

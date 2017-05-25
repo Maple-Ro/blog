@@ -153,12 +153,20 @@ class ArticleController extends Controller
 
     function lists(Request $request)
     {
-        $page = $request->page;
-        $page_size = intval($request->page_size) ?: 6;
+        $page = $request->page ?: 1;
+        $page_size = intval($request->pageSize) ?: 6;
         $data = Article::forPage($page, $page_size)->get();
+        $total = count(Article::all()->toArray());
         return json_encode([
             'status'=>200,
-            'data'=>$data
+            'msg'=>'success',
+            'data'=>[
+                'data'=>$data,
+                'pagination'=>[
+                    'current'=>$page,
+                    'total'=>$total
+                ]
+            ]
         ]);
     }
 }

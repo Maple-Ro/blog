@@ -7,11 +7,11 @@ $parser = $info->getParser();
 echo 'OS:', $parser->getOs(), "\n";
 $distr = $parser->getDistro();
 echo 'Distribution:', $distr['name'] . $distr['version'], "\n";
-echo 'Uptime:', $parser->getUpTime()['text'], "\n";//运行时间
+echo 'Uptime run:', $parser->getUpTime()['text'], "\n";//运行时间
+echo 'Uptime booted:', date('Y-m-d H:i:s', $parser->getUpTime()['bootedTimestamp']), "\n";//运行时间
 echo 'Kernel:', $parser->getKernel(), "\n";//内核
-echo 'Model:', $parser->getModel(), "\n";//model
+echo 'Model:', $parser->getModel(), "\n";//model return null
 echo 'HostName:', $parser->getHostName(), "\n";//主机名
-echo 'accessedIP:', $parser->getAccessedIP(), "\n";//可访问ip
 echo 'architecture:', $parser->getCPUArchitecture(), "\n";//cpu架构
 $load = $parser->getLoad();
 echo 'load:', $load['now'] . $load['5min'] . $load['15min'], "\n";//cpu 使用量

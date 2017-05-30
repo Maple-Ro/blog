@@ -1,6 +1,6 @@
 <?php
 /**-----------------------------------------------------------------  */
-/**-- 每周六定时任务上传备份压缩好的mongodb数据库文件       */
+/**-- 每周日12点定时任务上传备份压缩好的mongodb数据库文件       */
 /**-----------------------------------------------------------------  */
 require_once __DIR__ . '/vendor/autoload.php';
 // 引入鉴权类
@@ -18,8 +18,6 @@ $auth = new Auth($accessKey, $secretKey);
 $bucket = 'blog';
 // 生成上传 Token
 $token = $auth->uploadToken($bucket);
-// 要上传文件的本地路径
-//$filePath = '/var/log/mongodb/blog.tar.gz';
 // 上传到七牛后保存的文件名
 $key = "backup" . date('ymd-H:i:s') . ".zip";
 // 初始化 UploadManager 对象并进行文件的上传。

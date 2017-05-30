@@ -3,6 +3,5 @@
 /.idea
 vendor
 node_modules
-composer.lock
 .idea
 .env

@@ -16,6 +16,7 @@ use App\Model\SSLog;
 use App\Model\SSStatic;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Linfo\Linfo;
 
 class DashboardController extends Controller
 {
@@ -46,34 +47,42 @@ class DashboardController extends Controller
      */
     function os(): string
     {
+        $info = new Linfo();
+        $parser = $info->getParser();
+        //系统环境相关信息
+        $distr = $parser->getDistro();
+        $os = $parser->getOs();
+        $distribution = $distr['name'] .' '. $distr['version'];
+        $uptime = $parser->getUpTime()['text'];
+        $uptime_booted = date('Y-m-d H:i:s', $parser->getUpTime()['bootedTimestamp']);
+        $ernel =  $parser->getKernel();
+        $HostName =  $parser->getHostName();//主机名
+        $architecture = $parser->getCPUArchitecture();//cpu架构
+        $PHPversion = $parser->getPhpVersion();//PHP版本
+        $nginxVersion = '';
+        $mysqlVersion = $this->mysqlVersion();
+        $mongodbVersion = '';
+        $redisVersion = '';
+        //运行相关信息
+        $load = $parser->getLoad();
+//        echo 'load:', $load['now'] . $load['5min'] . $load['15min'], "\n";//cpu 使用量
+        $ramUsage = $parser->getRam();
+        $total = $ramUsage['total'] / 1024 / 1024;//Mb
+        $free = $ramUsage['free'] / 1024 / 1024;//Mb
+        $used = $total - $free;//Mb
+        $space =  (disk_total_space('/') - disk_free_space('/')) / 1024 / 1024 / 1024;
+        $space = number_format($space, 2, '.', '');
         return json_encode([
             'status' => 200,
             'success' => true,
             'info' => [
                 'data' => [
-                    ['cpu' => 20],
-                    ['cpu' => 38],
-                    ['cpu' => 34],
-                    ['cpu' => 56],
-                    ['cpu' => 78],
-                    ['cpu' => 34],
-                    ['cpu' => 25],
-                    ['cpu' => 67],
-                    ['cpu' => 87],
-                    ['cpu' => 56],
-                    ['cpu' => 67],
-                    ['cpu' => 34],
-                    ['cpu' => 88],
-                    ['cpu' => 76],
-                    ['cpu' => 43],
-                    ['cpu' => 23],
-                    ['cpu' => 45],
-                    ['cpu' => 43],
-                    ['cpu' => 65],
-                    ['cpu' => 88],
+                    ['cpu' => $load['15min']],
+                    ['cpu' => $load['5min']],
+                    ['cpu' => $load['now']]
                 ],
-                'usage' => 35,
-                'space' => 30,
+                'usage' => $used,
+                'space' => $space,
                 'cpu' => 50
             ]
         ]);
@@ -326,5 +335,19 @@ class DashboardController extends Controller
 //            'status' => 200,
 //            'data' => $data
 //        ]);
+    }
+
+    private function mysqlVersion():string {
+        try {
+            $dsn = 'mysql:dbname=sys;host=127.0.0.1';
+            $user = 'root';
+            $password = '';
+            $conn = new \PDO($dsn, $user, $password);
+            $version = $conn->getAttribute(constant("PDO::ATTR_SERVER_VERSION"));
+            $conn = null;
+            return $version;
+        } catch (\PDOException $e) {
+            return '';
+        }
     }
 }

@@ -10,13 +10,13 @@ namespace App\Http\Controllers\Back;
 
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 use App\Model\SSD;
 use App\Model\SSLog;
 use App\Model\SSStatic;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Linfo\Linfo;
+use Psy\Util\Str;
 
 class DashboardController extends Controller
 {
@@ -49,28 +49,33 @@ class DashboardController extends Controller
     {
         $info = new Linfo();
         $parser = $info->getParser();
-        //系统环境相关信息
-        $distr = $parser->getDistro();
-        $os = $parser->getOs();
-        $distribution = $distr['name'] .' '. $distr['version'];
-        $uptime = $parser->getUpTime()['text'];
-        $uptime_booted = date('Y-m-d H:i:s', $parser->getUpTime()['bootedTimestamp']);
-        $ernel =  $parser->getKernel();
-        $HostName =  $parser->getHostName();//主机名
-        $architecture = $parser->getCPUArchitecture();//cpu架构
-        $PHPversion = $parser->getPhpVersion();//PHP版本
-        $nginxVersion = '';
-        $mysqlVersion = $this->mysqlVersion();
-        $mongodbVersion = '';
-        $redisVersion = '';
+        if(!Cache::has('osStaticInfo')){
+            //系统环境相关信息
+            $distr = $parser->getDistro();
+            $staticInfo['os']  = $parser->getOs();
+            $staticInfo['distribution'] = $distr['name'] . ' ' . $distr['version'];
+            $staticInfo['kernel'] =  $parser->getKernel();
+//            $staticInfo['hostName'] = $parser->getHostName();//主机名
+//            $staticInfo['architecture'] = $parser->getCPUArchitecture();//cpu架构
+            $staticInfo['PHP'] = $parser->getPhpVersion();//PHP版本
+            $staticInfo['nginx'] = substr($_SERVER['SERVER_SOFTWARE'], 6);
+            $staticInfo['mysql'] = $this->mysqlVersion();
+            $staticInfo['mongodb'] = $this->mongodbVersion();
+            $staticInfo['redis'] = $this->redisVersion();
+            Cache::put('osStaticInfo', $staticInfo, 24*60);
+        }else{
+            $staticInfo = Cache::get('osStaticInfo');
+        }
+        $staticInfo['uptime']  = $parser->getUpTime()['text'];
+        $staticInfo['uptime_booted'] = date('Y-m-d H:i:s', $parser->getUpTime()['bootedTimestamp']);
         //运行相关信息
         $load = $parser->getLoad();
-//        echo 'load:', $load['now'] . $load['5min'] . $load['15min'], "\n";//cpu 使用量
         $ramUsage = $parser->getRam();
         $total = $ramUsage['total'] / 1024 / 1024;//Mb
         $free = $ramUsage['free'] / 1024 / 1024;//Mb
         $used = $total - $free;//Mb
-        $space =  (disk_total_space('/') - disk_free_space('/')) / 1024 / 1024 / 1024;
+        $space = (disk_total_space('/') - disk_free_space('/')) / 1024 / 1024 / 1024;
+        $used = number_format($used, 2, '.', '');
         $space = number_format($space, 2, '.', '');
         return json_encode([
             'status' => 200,
@@ -83,7 +88,8 @@ class DashboardController extends Controller
                 ],
                 'usage' => $used,
                 'space' => $space,
-                'cpu' => 50
+                'cpu' => 50,
+                'staticInfo'=>$staticInfo
             ]
         ]);
 
@@ -300,10 +306,10 @@ class DashboardController extends Controller
                 return $collection->aggregate([
                     [
                         '$group' => [
-                            '_id' =>[
-                                'city'=>'$city',
-                                'lon'=>'$lon',
-                                'lat'=>'$lat'
+                            '_id' => [
+                                'city' => '$city',
+                                'lon' => '$lon',
+                                'lat' => '$lat'
                             ],
                             'count' => [
                                 '$sum' => '$num'
@@ -313,7 +319,7 @@ class DashboardController extends Controller
                 ]);
             })->toArray();
             $result = [];
-            foreach ($res as $k=>$v){
+            foreach ($res as $k => $v) {
                 $result[$k]['city'] = $v['_id']['city'];
                 $result[$k]['lon'] = $v['_id']['lon'];
                 $result[$k]['lat'] = $v['_id']['lat'];
@@ -337,7 +343,8 @@ class DashboardController extends Controller
 //        ]);
     }
 
-    private function mysqlVersion():string {
+    private function mysqlVersion(): string
+    {
         try {
             $dsn = 'mysql:dbname=sys;host=127.0.0.1';
             $user = 'root';
@@ -347,6 +354,29 @@ class DashboardController extends Controller
             $conn = null;
             return $version;
         } catch (\PDOException $e) {
+            return '';
+        }
+    }
+
+    private function redisVersion(): string
+    {
+        try {
+            $r = new \Redis();
+            $r->connect('127.0.0.1');
+            $s =  $r->info()['redis_version'];
+            $r->close();
+            return $s;
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
+
+    private function mongodbVersion():string {
+        try {
+            $s = shell_exec('mongo --version');
+            $v = explode(" ", $s)[3];
+            return substr($v, 0, strrpos($v, '.')+2);
+        } catch (\Exception $e) {
             return '';
         }
     }

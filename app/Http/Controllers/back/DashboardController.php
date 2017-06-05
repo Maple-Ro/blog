@@ -16,7 +16,6 @@ use App\Model\SSStatic;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Linfo\Linfo;
-use Psy\Util\Str;
 
 class DashboardController extends Controller
 {
@@ -82,17 +81,16 @@ class DashboardController extends Controller
             'success' => true,
             'info' => [
                 'data' => [
-                    ['cpu' => $load['15min']],
-                    ['cpu' => $load['5min']],
-                    ['cpu' => $load['now']]
+                    ['cpu' => floatval($load['15min']*100)],
+                    ['cpu' => floatval($load['5min']*100)],
+                    ['cpu' => floatval($load['now']*100)]
                 ],
-                'usage' => $used,
-                'space' => $space,
-                'cpu' => 50,
+                'usage' => floatval($used),
+                'space' => floatval($space),
+                'cpu' => floatval(number_format(($load['15min']+$load['5min']+$load['now'])/3*100, 2, '.', '')),
                 'staticInfo'=>$staticInfo
             ]
         ]);
-
     }
 
     function card(): string

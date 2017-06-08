@@ -20,6 +20,7 @@ use Linfo\Linfo;
 class DashboardController extends Controller
 {
     const IP_API = "http://ip-api.com/php/";
+    const TTL = 60*24*30*6;
 
     /**
      * 天气信息
@@ -190,11 +191,17 @@ class DashboardController extends Controller
                 if (!!$v['_id']) {
                     $result[$k]['ip'] = $v['_id'];
                     $result[$k]['count'] = $v['count'];
-                    $addr = unserialize(file_get_contents(self::IP_API . $v['_id']));
-                    if ($addr['status'] === 'success') {
-                        $result[$k]['addr'] = $addr;
-                    } else {
-                        $result[$k]['addr'] = [];
+                    //缓存已经查询过的ip地址
+                    if(Cache::has('ip_'.$v['_id'])){
+                        $result[$k]['addr'] = Cache::get('ip_'.$v['_id']);
+                    }else{
+                        $addr = unserialize(callThirdApi(self::IP_API . $v['_id']));
+                        if ($addr['status'] === 'success') {
+                            $result[$k]['addr'] = $addr;
+                            Cache::put('ip_'.$v['_id'], $addr, self::TTL);
+                        } else {
+                            $result[$k]['addr'] = [];
+                        }
                     }
                 }
             }
@@ -272,8 +279,18 @@ class DashboardController extends Controller
             })->toArray();
             $result = [];
             foreach ($res as $k => $v) {
-                if (!!$v['_id'] && $v['count'] > 1000) {
-                    $addr = unserialize(file_get_contents(self::IP_API . $v['_id']));
+                if (!!$v['_id'] && $v['count'] > 100) {
+
+                    if(Cache::has('ip_'.$v['_id'])){
+                        $addr = Cache::get('ip_'.$v['_id']);
+                    }else{
+                        $addr = unserialize(callThirdApi(self::IP_API . $v['_id']));
+//                        $addr = unserialize(file_get_contents(self::IP_API . $v['_id']));
+
+                        if ($addr['status'] === 'success') {
+                            Cache::put('ip_'.$v['_id'], $addr, self::TTL);
+                        }
+                    }
                     array_push($result, [
                         'ip' => $v['_id'],
                         'count' => $v['count'],

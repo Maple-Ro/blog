@@ -72,19 +72,21 @@ if (!function_exists('callThirdApi')) {
         try {
             $client = new GuzzleHttp\Client();
             $response = $client->request('get', $url, ['query' => $params]);
-            $result = $response->getBody();
+            $result = $response->getBody()->getContents();
             if (empty($result)) {
                 return json_decode('{"code":"500","status":"failed","msg":"api数据异常" }');
             }
-            return json_decode($result);
+            return $result;
         } catch (\Exception $e) {
             $error = [
                 'code' => 500,
                 'status' => 'failed',
-                'msg' => $e->getMessage()
+                'msg' => $e->getMessage(),
+                'url'=>$url,
+                'created_at'=>\Carbon\Carbon::now()->toDateTimeString(),
+                'updated_at'=>\Carbon\Carbon::now()->toDateTimeString()
             ];
-            $va = json_decode(json_encode($error));
-            return $va;
+            \App\Model\IPApiCalledLog::insert($error);
         }
     }
 }

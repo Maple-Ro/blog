@@ -122,3 +122,23 @@ if (!function_exists('pagination')) {
         return $html;
     }
 }
+if(!function_exists('success')){
+    function success(array $data=[]){
+        return json_encode([
+            'status'=>200,
+            'data'=>[
+                'success'=>true,
+                'message' => 'operate success',
+                'data'=>$data
+            ]
+        ]);
+    }
+}
+if(!function_exists('fail')){
+    function fail(int $code = 400, string $msg){
+        return json_encode([
+            'status' => $code,
+            'message' => $msg
+        ]);
+    }
+}

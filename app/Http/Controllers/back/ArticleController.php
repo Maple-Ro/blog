@@ -158,15 +158,46 @@ class ArticleController extends Controller
         $data = Article::forPage($page, $page_size)->get();
         $total = count(Article::all()->toArray());
         return json_encode([
-            'status'=>200,
-            'msg'=>'success',
-            'data'=>[
-                'data'=>$data,
-                'pagination'=>[
-                    'current'=>$page,
-                    'total'=>$total
-                ]
-            ]
+           'data'=>[
+               'data'=>$data,
+               'pagination'=>[
+                   'current'=>$page,
+                   'total'=>$total
+               ]
+           ],
+            'status'=>200
         ]);
+    }
+
+    function del(Request $request){
+        $id = $request->id;
+        if(empty($id)) return fail(1000, 'id needed!');
+        try {
+            if ($this->delOne($id)) {
+                return success();
+            }
+        } catch (\Exception $e) {
+            return fail(400,$e->getMessage());
+        }
+    }
+
+    function down(Request $request){
+      $this->modify($request->id, 1);
+    }
+
+    function up(Request $request){
+        $this->modify($request->id, 0);
+    }
+
+    private function modify(string $id, int $code){
+        if(empty($id)) return fail(1000, 'id needed!');
+        try {
+            $article = Article::find($id);
+            $article->is_down = $code;
+            $article->save();
+            return success();
+        } catch (\Exception $e) {
+            return fail(400,$e->getMessage());
+        }
     }
 }

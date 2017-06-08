@@ -45,6 +45,9 @@ Route::group(['namespace' => 'Back'], function () {
     /**文章*/
     Route::get('/article/lists', 'ArticleController@lists');
     Route::get('/article/create', 'ArticleController@create');
+    Route::post('/article/del', 'ArticleController@del');
+    Route::post('/article/down', 'ArticleController@down');
+    Route::post('/article/up', 'ArticleController@up');
 
 });
 

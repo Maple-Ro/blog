@@ -122,15 +122,22 @@ if (!function_exists('pagination')) {
         return $html;
     }
 }
-if(!function_exists('success')){
-    function success(array $data=[]){
+if(!function_exists('successWithoutData')){
+    function successWithoutData(){
         return json_encode([
             'status'=>200,
             'data'=>[
                 'success'=>true,
-                'message' => 'operate success',
-                'data'=>$data
+                'message' => 'operate success'
             ]
+        ]);
+    }
+}
+if(!function_exists('successWithData')){
+    function successWithData(array $data){
+        return json_encode([
+            'status'=>200,
+            'data'=>$data
         ]);
     }
 }

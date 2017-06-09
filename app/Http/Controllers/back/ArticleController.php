@@ -126,7 +126,7 @@ class ArticleController extends Controller
     //TODO 插入新的字段
     function create(Request $request): string
     {
-        $random =random_int(1,10000);
+        $random = random_int(1, 10000);
         $title = '测试1';
         $content = '测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1
         测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1
@@ -137,18 +137,19 @@ class ArticleController extends Controller
         $instance = new Article();
         $instance->title = $title;
         $instance->content = $content;
+        $instance->is_draft = random_int(0, 1);
         $res = $instance->save();
-       if($res){
-           return json_encode([
-               'status'=>200,
-               'msg'=>'success'
-           ]);
-       }else{
-           return json_encode([
-               'status'=>400,
-               'msg'=>'wrong'
-           ]);
-       }
+        if ($res) {
+            return json_encode([
+                'status' => 200,
+                'msg' => 'success'
+            ]);
+        } else {
+            return json_encode([
+                'status' => 400,
+                'msg' => 'wrong'
+            ]);
+        }
     }
 
     function lists(Request $request)
@@ -157,47 +158,48 @@ class ArticleController extends Controller
         $page_size = intval($request->pageSize) ?: 6;
         $data = Article::forPage($page, $page_size)->get();
         $total = count(Article::all()->toArray());
-        return json_encode([
-           'data'=>[
-               'data'=>$data,
-               'pagination'=>[
-                   'current'=>$page,
-                   'total'=>$total
-               ]
-           ],
-            'status'=>200
+        return successWithData([
+            'data' => $data,
+            'pagination' => [
+                'current' => $page,
+                'total' => $total
+            ]
         ]);
     }
 
-    function del(Request $request){
+    function del(Request $request)
+    {
         $id = $request->id;
-        if(empty($id)) return fail(1000, 'id needed!');
+        if (empty($id)) return fail(1000, 'id needed!');
         try {
             if ($this->delOne($id)) {
-                return success();
+                return successWithoutData();
             }
         } catch (\Exception $e) {
-            return fail(400,$e->getMessage());
+            return fail(400, $e->getMessage());
         }
     }
 
-    function down(Request $request){
-      $this->modify($request->id, 1);
+    function down(Request $request)
+    {
+        return $this->modify($request->id, 1);
     }
 
-    function up(Request $request){
-        $this->modify($request->id, 0);
+    function up(Request $request)
+    {
+        return $this->modify($request->id, 0);
     }
 
-    private function modify(string $id, int $code){
-        if(empty($id)) return fail(1000, 'id needed!');
+    private function modify(string $id, int $code)
+    {
+        if (empty($id)) return fail(1000, 'id needed!');
         try {
             $article = Article::find($id);
-            $article->is_down = $code;
+            $article->is_draft = $code;
             $article->save();
-            return success();
+            return successWithoutData();
         } catch (\Exception $e) {
-            return fail(400,$e->getMessage());
+            return fail(400, $e->getMessage());
         }
     }
 }

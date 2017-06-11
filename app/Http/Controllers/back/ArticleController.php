@@ -123,22 +123,28 @@ class ArticleController extends Controller
         }
     }
 
-    //TODO 插入新的字段
-    function create(Request $request): string
+    /**
+     * mock data
+     * @param Request $request
+     * @return string
+     */
+    function create(): string
     {
-        $random = random_int(1, 10000);
-        $title = '测试1';
-        $content = '测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1
+        for ($i = 0; $i < 40; $i++) {
+            $random = random_int(1, 10000);
+            $title = '测试1';
+            $content = '测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1
         测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1
         测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1
         测试1测试1测试1测试1测试1测试1测试1测试1';
-        $title = str_replace('1', $random, $title);
-        $content = str_replace('1', $random, $content);
-        $instance = new Article();
-        $instance->title = $title;
-        $instance->content = $content;
-        $instance->is_draft = random_int(0, 1);
-        $res = $instance->save();
+            $title = str_replace('1', $random, $title);
+            $content = str_replace('1', $random, $content);
+            $instance = new Article();
+            $instance->title = $title;
+            $instance->content = $content;
+            $instance->is_draft = random_int(0, 1);
+            $res = $instance->save();
+        }
         if ($res) {
             return json_encode([
                 'status' => 200,
@@ -201,5 +207,10 @@ class ArticleController extends Controller
         } catch (\Exception $e) {
             return fail(400, $e->getMessage());
         }
+    }
+
+    function create2(string $data)
+    {
+
     }
 }

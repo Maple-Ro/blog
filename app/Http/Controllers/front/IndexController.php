@@ -30,8 +30,8 @@ class IndexController extends Controller
 
     private function showList(string $url, int $page, int $limit = 6): View
     {
-        $total = Article::count('_id') / $limit + 1;
-        $data = Article::forPage($page, $limit)->get();
+        $total = count(Article::where('is_draft', 0)->get()->toArray()) / $limit + 1;
+        $data = Article::forPage($page, $limit)->where('is_draft', 0)->orderBy('updated_at', 'desc')->get();
         $links = pagination($url, $page, $total);
         return frontView('content')->with(compact(['data', 'links']));
     }

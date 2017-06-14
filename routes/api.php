@@ -45,10 +45,12 @@ Route::group(['namespace' => 'Back'], function () {
     /**文章*/
     Route::get('/article/lists', 'ArticleController@lists');
     Route::get('/article/create', 'ArticleController@create');
-    Route::post('/article/create', 'ArticleController@create2');
+    Route::post('/article/create', 'ArticleController@post');
+    Route::post('/article/edit', 'ArticleController@post');
     Route::post('/article/del', 'ArticleController@del');
     Route::post('/article/down', 'ArticleController@down');
     Route::post('/article/up', 'ArticleController@up');
+    Route::post('/article/upload', 'ArticleController@upload');
 
 });
 

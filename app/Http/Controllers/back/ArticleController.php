@@ -209,8 +209,54 @@ class ArticleController extends Controller
         }
     }
 
-    function create2(string $data)
+    /**
+     * 新增/修改
+     * @return string
+     */
+    function post()
     {
+        try {
+            $title = \request('title');
+            $content = \request('content');
+            $id = \request('id', 0);
+            if(!!$id){
+                $article = Article::find($id);
+            }else{
+                $article = new Article();
+            }
+            $article->title = $title;
+            $article->content = $content;
+            $article->is_draft = 1;
+            $article->save();
+            return successWithoutData();
+        } catch (\Exception $e) {
+            return fail(400, $e->getMessage());
+        }
+    }
 
+    /**
+     * 上传图片
+     * @return string
+     */
+    function upload(){
+        $file = $_FILES['file'];
+        if ($file['error'] != 0) fail(400, '上传失败');
+        if ($file['size'] > 2 * 1024 * 1024) fail(400, '上传失败');
+        if (!getimagesize($file['tmp_name'])) fail(400, '上传失败');
+        $name = md5($file['tmp_name'] . time());
+        $ext = explode('/', $file['type'])[1];
+        $dest = env('RESOURCE_PATH') . '/' . date('ymd');
+        if (!is_dir($dest)) {
+            mkdir($dest, 0777, true);
+            chmod($dest, 0777);
+        }
+        $r = move_uploaded_file($file['tmp_name'], $dest . '/' . $name . '.' . $ext);
+        if ($r) {
+            return successWithData([
+                'path' => '/' . date('ymd') . '/' . $name . '.' . $ext
+            ]);
+        } else {
+            fail(400, '上传失败');
+        }
     }
 }

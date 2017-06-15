@@ -124,11 +124,11 @@ class ArticleController extends Controller
     }
 
     /**
+     * @deprecated
      * mock data
-     * @param Request $request
      * @return string
      */
-    function create(): string
+    private function create(): string
     {
         for ($i = 0; $i < 40; $i++) {
             $random = random_int(1, 10000);
@@ -258,5 +258,13 @@ class ArticleController extends Controller
         } else {
             fail(400, '上传失败');
         }
+    }
+
+    function content():string {
+        $id = \request('id');
+         $content = !empty(Article::find($id)->content) ? Article::find($id)->content : '' ;
+        return successWithData([
+            'content'=>$content
+        ]);
     }
 }

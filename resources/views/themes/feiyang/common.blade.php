@@ -113,7 +113,6 @@
     </style>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="{{homeAssets('/js/favico.js')}}" type="text/javascript"></script>
     <script>
         window.onload = function () {
@@ -123,6 +122,7 @@
             favicon.badge(3);
         }
     </script>
+    @yield('js')
 </head>
 <body>
 <!--common title:-->

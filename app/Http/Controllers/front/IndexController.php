@@ -30,8 +30,15 @@ class IndexController extends Controller
 
     private function showList(string $url, int $page, int $limit = 6): View
     {
-        $total = count(Article::where('is_draft', 0)->get()->toArray()) / $limit + 1;
-        $data = Article::forPage($page, $limit)->where('is_draft', 0)->orderBy('updated_at', 'desc')->get();
+        $total = ceil(count(Article::where('is_draft', 0)->get()->toArray()) / $limit) ;
+        $data = Article::forPage($page, $limit)->where('is_draft', 0)->orderBy('updated_at', 'desc')->get()->toArray();
+        foreach ($data as $k=>$v){
+            $content = json_decode($v['content'], true);
+            $data[$k]['content']  = '';
+            foreach ($content['blocks'] as $i =>$j){
+                $data[$k]['content'] .= $j['text'];
+            }
+        }
         $links = pagination($url, $page, $total);
         return frontView('content')->with(compact(['data', 'links']));
     }
@@ -39,13 +46,17 @@ class IndexController extends Controller
     function detail(string $id)
     {
         $data = Article::find($id);
-        if (empty($data)) {
+
+        if (empty($data) || $data->is_draft ===1) {
             abort(404);
         }
             return frontView('detail')->with(compact(['data']));
     }
 
-    public function test()
+    /**
+     * @deprecated
+     */
+    private function test()
     {
         $seedData = [
             [

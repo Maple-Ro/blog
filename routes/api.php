@@ -51,6 +51,7 @@ Route::group(['namespace' => 'Back'], function () {
     Route::post('/article/down', 'ArticleController@down');
     Route::post('/article/up', 'ArticleController@up');
     Route::post('/article/upload', 'ArticleController@upload');
+    Route::get('/article/content', 'ArticleController@content');
 
 });
 

@@ -18,15 +18,15 @@ class ArticlePresenter
             foreach ($data as $i) {
                 $html .= '<article class="post">
             <h2 class="title">
-                <a href="/detail/' . $i->_id . '">
-                    ' . $i->title . '</a>
+                <a href="/detail/' . $i['_id'] . '">
+                    ' . $i['title'] . '</a>
             </h2>
             <div class="entry-content">';
-                $html .= '<p>' . mb_substr($i->content, 0, 30) . '</p><a href="/detail/' . $i->id . '" class="more-link">Read on &rarr;</a>
+                $html .= '<p>' . mb_substr($i['content'], 0, 30) . '</p><a href="/detail/' . $i['_id'] . '" class="more-link">Read on &rarr;</a>
             </div>
             <!--左侧日期评论数目统计区域-->
             <div class="meta">
-                <div class="date"><span>' . $i->updated_at . '</span></div>
+                <div class="date"><span>' . $i['updated_at'] . '</span></div>
                 <div class="tags">
                 </div>
                 <div class="comments"><a href="#">Comments</a>
@@ -46,11 +46,11 @@ class ArticlePresenter
         } else {
             $html .= '<article class="post">
             <h2 class="title">
-                <a href="/detail/' . $i->id . '">
+                <a href="/detail/' . $i->_id . '">
                     ' . $i->title . '</a>
             </h2>
             <div class="entry-content">';
-            $html .= '<p>' . $i->content . '</p>
+            $html .= '<p id="article_content" data-content="">'.$i->content.'</p>
             </div>
             <!--左侧日期评论数目统计区域-->
             <div class="meta">

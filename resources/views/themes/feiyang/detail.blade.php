@@ -1,11 +1,27 @@
 @extends('themes.feiyang.common')
-@inject('article', 'App\Presenters\ArticlePresenter')
 @section('title')
-    MapleImage
+    MapleImage - {{$data->title}}
+@endsection
+@section('js')
+    <script src="{{homeAssets('/js/content.js')}}" type="text/javascript" defer></script>
 @endsection
 @section('content')
     <div id="content" class="inner">
-        <!--文章列表-->
-        {!! $article->detail($data) !!}
+        <article class="post">
+            <h2 class="title">
+                <a href="/detail/{{$data->_id}}">{{$data->title}}</a>
+            </h2>
+            <div class="entry-content"><p id="article_content" data-content="{!! htmlspecialchars($data->content) !!}"></p></div>
+            <!--左侧日期评论数目统计区域-->
+            <div class="meta">
+                <div class="date">
+                    <span>{{$data->updated_at}}</span>
+                </div>
+                <div class="tags">
+                </div>
+                <div class="comments"><a href="javascript:;">Comments</a>
+                </div>
+            </div>
+        </article>
     </div>
 @endsection

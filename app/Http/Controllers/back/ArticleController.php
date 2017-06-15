@@ -162,7 +162,13 @@ class ArticleController extends Controller
     {
         $page = $request->page ?: 1;
         $page_size = intval($request->pageSize) ?: 6;
-        $data = Article::forPage($page, $page_size)->get();
+        $field = $request->field ?: '';
+        $keyword = $request->keyword ?: '';
+        if(!!$field){
+            $data = Article::where($field, 'like', '%'.$keyword.'%')->forPage($page, $page_size)->get();
+        }else{
+            $data = Article::forPage($page, $page_size)->get();
+        }
         $total = count(Article::all()->toArray());
         return successWithData([
             'data' => $data,

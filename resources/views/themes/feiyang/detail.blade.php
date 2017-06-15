@@ -11,7 +11,7 @@
             <h2 class="title">
                 <a href="/detail/{{$data->_id}}">{{$data->title}}</a>
             </h2>
-            <div class="entry-content"><p id="article_content" data-content="{!! htmlspecialchars($data->content) !!}"></p></div>
+            <div class="entry-content"><div id="article_content" data-content="{!! htmlspecialchars($data->content) !!}"></div></div>
             <!--左侧日期评论数目统计区域-->
             <div class="meta">
                 <div class="date">

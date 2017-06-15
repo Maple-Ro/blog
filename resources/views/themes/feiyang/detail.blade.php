@@ -3,7 +3,7 @@
     MapleImage - {{$data->title}}
 @endsection
 @section('js')
-    <script src="{{homeAssets('/js/content.js')}}" type="text/javascript" defer></script>
+    <script src="http://oq1gjw90c.bkt.clouddn.com/content.js" type="text/javascript" defer></script>
 @endsection
 @section('content')
     <div id="content" class="inner">

@@ -224,6 +224,7 @@ class ArticleController extends Controller
         try {
             $title = \request('title');
             $content = \request('content');
+            $category = \request('category');
             $id = \request('id', 0);
             if (!!$id) {
                 $article = Article::find($id);
@@ -232,6 +233,7 @@ class ArticleController extends Controller
             }
             $article->title = $title;
             $article->content = $content;
+            $article->category = $category;
             $article->is_draft = 1;
             $article->save();
             return successWithoutData();

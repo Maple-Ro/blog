@@ -1,27 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stanley
- * Date: 2017/4/6 0006
- * Time: 21:00
- */
 
 namespace App\Model;
 
 use Jenssegers\Mongodb\Eloquent\Model as Moloquent;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
-/**
- * 文章Model
- * Class Article
- * 使用软删除
- * @package App\Model
- */
-class Article extends Moloquent
+class Category extends Moloquent
 {
     use SoftDeletes;
     protected $connection = 'mongodb';
-    protected $collection = 'article';
+    protected $collection = 'category';
     protected $primaryKey = '_id';
     protected $dates = ['deleted_at'];
 }

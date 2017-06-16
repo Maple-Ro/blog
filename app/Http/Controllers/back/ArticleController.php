@@ -164,9 +164,9 @@ class ArticleController extends Controller
         $page_size = intval($request->pageSize) ?: 6;
         $field = $request->field ?: '';
         $keyword = $request->keyword ?: '';
-        if(!!$field){
-            $data = Article::where($field, 'like', '%'.$keyword.'%')->forPage($page, $page_size)->get();
-        }else{
+        if (!!$field) {
+            $data = Article::where($field, 'like', '%' . $keyword . '%')->forPage($page, $page_size)->get();
+        } else {
             $data = Article::forPage($page, $page_size)->get();
         }
         $total = count(Article::all()->toArray());
@@ -225,9 +225,9 @@ class ArticleController extends Controller
             $title = \request('title');
             $content = \request('content');
             $id = \request('id', 0);
-            if(!!$id){
+            if (!!$id) {
                 $article = Article::find($id);
-            }else{
+            } else {
                 $article = new Article();
             }
             $article->title = $title;
@@ -244,7 +244,8 @@ class ArticleController extends Controller
      * 上传图片
      * @return string
      */
-    function upload(){
+    function upload()
+    {
         $file = $_FILES['file'];
         if ($file['error'] != 0) fail(400, '上传失败');
         if ($file['size'] > 2 * 1024 * 1024) fail(400, '上传失败');
@@ -266,11 +267,13 @@ class ArticleController extends Controller
         }
     }
 
-    function content():string {
+    function content(): string
+    {
         $id = \request('id');
-         $content = !empty(Article::find($id)->content) ? Article::find($id)->content : '' ;
+        $content = !empty(Article::find($id)->content) ? Article::find($id)->content : '';
         return successWithData([
-            'content'=>$content
+            'content' => $content
         ]);
     }
+
 }

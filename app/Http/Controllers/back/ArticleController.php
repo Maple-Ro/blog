@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
 use App\Model\Article;
+use App\Model\Tags;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -233,6 +234,8 @@ class ArticleController extends Controller
             $article->content = \request('content');
             $article->category = \request('category');
             $article->state = \request('state') === 'true';
+            $article->tags = \request('tags');
+            $this->saveTags($article->tags);
             $article->save();
             return successWithoutData();
         } catch (\Exception $e) {
@@ -276,4 +279,19 @@ class ArticleController extends Controller
         ]);
     }
 
+    /**
+     * 保存提交的tags，确保每个tags唯一，区分大小写 TODO
+     * @param array $tags
+     */
+    function saveTags(array $tags)
+    {
+        foreach ($tags as $k => $v) {
+            $tag = Tags::where('name', $v)->get()->toArray();
+            if (!empty($tag)) continue;
+            $tag = new Tags();
+            $tag->name = $v;
+            $tag->save();
+            unset($tag);
+        }
+    }
 }

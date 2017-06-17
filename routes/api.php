@@ -55,6 +55,7 @@ Route::group(['namespace' => 'Back'], function () {
     Route::get('/category/list', 'CategoryController@list');
     Route::post('/category/edit', 'CategoryController@post');
     Route::post('/category/new', 'CategoryController@post');
+    Route::get('/tags/list', 'TagsController@list');
 
 });
 

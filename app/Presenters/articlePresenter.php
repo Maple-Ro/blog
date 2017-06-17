@@ -27,9 +27,14 @@ class ArticlePresenter
             <!--左侧日期评论数目统计区域-->
             <div class="meta">
                 <div class="date"><span>' . $i['updated_at'] . '</span></div>
-                <div class="tags">
-                </div>
-                <div class="comments"><a href="#">Comments</a>
+                <div class="tags">';
+                if (!empty($i['tags'])) {
+                    foreach ($i['tags'] as $j) {
+                        $html .= '<a href="javascript:;">' . $j . '</a>&nbsp;';
+                    }
+                }
+                $html .= '</div>
+                <div class="comments"><a href="javascript:;">Comments</a>
                 </div>
             </div>
         </article>';
@@ -38,6 +43,11 @@ class ArticlePresenter
         return $html;
     }
 
+    /**
+     * @deprecated
+     * @param Article $i
+     * @return string
+     */
     function detail(Article $i)
     {
         $html = '';

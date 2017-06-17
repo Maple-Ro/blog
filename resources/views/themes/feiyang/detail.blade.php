@@ -18,6 +18,11 @@
                     <span>{{$data->updated_at}}</span>
                 </div>
                 <div class="tags">
+                    @if(!empty($data->tags))
+                        @foreach($data->tags as $i)
+                            <a href="javascript:;">{{$i}}</a>
+                        @endforeach
+                    @endif
                 </div>
                 <div class="comments"><a href="javascript:;">Comments</a>
                 </div>

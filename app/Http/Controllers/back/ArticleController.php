@@ -194,20 +194,20 @@ class ArticleController extends Controller
 
     function down(Request $request)
     {
-        return $this->modify($request->id, 1);
+        return $this->modify($request->id, false);
     }
 
     function up(Request $request)
     {
-        return $this->modify($request->id, 0);
+        return $this->modify($request->id, true);
     }
 
-    private function modify(string $id, int $code)
+    private function modify(string $id, bool $state)
     {
         if (empty($id)) return fail(1000, 'id needed!');
         try {
             $article = Article::find($id);
-            $article->is_draft = $code;
+            $article->state = $state;
             $article->save();
             return successWithoutData();
         } catch (\Exception $e) {
@@ -223,8 +223,6 @@ class ArticleController extends Controller
     {
         try {
             $title = \request('title');
-            $content = \request('content');
-            $category = \request('category');
             $id = \request('id', 0);
             if (!!$id) {
                 $article = Article::find($id);
@@ -232,9 +230,9 @@ class ArticleController extends Controller
                 $article = new Article();
             }
             $article->title = $title;
-            $article->content = $content;
-            $article->category = $category;
-            $article->is_draft = 1;
+            $article->content = \request('content');
+            $article->category = \request('category');
+            $article->state = \request('state') === 'true';
             $article->save();
             return successWithoutData();
         } catch (\Exception $e) {

@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['namespace' => 'Back'], function () {
+Route::group(['namespace' => 'back'], function () {
     /**React测试*/
     Route::get('/insert', 'ReactDemoController@insert');
     Route::get('/fetchReactDemo', 'ReactDemoController@fetch');

@@ -114,6 +114,7 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <script src="{{homeAssets('/js/favico.js')}}" type="text/javascript"></script>
+    <script src="{{homeAssets('/js/analysis.js')}}" async defer type="text/javascript"></script>
     <script>
         window.onload = function () {
             var favicon = new Favico({

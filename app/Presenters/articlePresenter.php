@@ -22,7 +22,7 @@ class ArticlePresenter
                     ' . $i['title'] . '</a>
             </h2>
             <div class="entry-content">';
-                $html .= '<p>' . mb_substr($i['content'], 0, 30) . '</p><a href="/detail/' . $i['_id'] . '" class="more-link">Read on &rarr;</a>
+                $html .= '<p>' . mb_substr($i['content'], 0, 100) . '</p><a href="/detail/' . $i['_id'] . '" class="more-link">Read on &rarr;</a>
             </div>
             <!--左侧日期评论数目统计区域-->
             <div class="meta">

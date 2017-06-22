@@ -130,6 +130,6 @@
 @include('themes.feiyang.nav')
 <!--内容区域-->
 @yield('content')
-<footer id="footer" class="inner">Copyright &copy; 2016-{{\Carbon\Carbon::now()->format('Y')}}&nbsp;&nbsp;&nbsp;&nbsp;MapleImage&nbsp;&nbsp;枫叶映像</footer>
+<footer id="footer" class="inner">Copyright &copy; 2016 - {{\Carbon\Carbon::now()->format('Y')}}&nbsp;&nbsp;&nbsp;&nbsp;MapleImage&nbsp;&nbsp;枫叶映像</footer>
 </body>
 </html>

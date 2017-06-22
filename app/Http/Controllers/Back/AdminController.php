@@ -49,6 +49,7 @@ class AdminController extends Controller
             ]);
         }
     }
+
     function login()
     {
         return backView('page.login');
@@ -103,5 +104,8 @@ class AdminController extends Controller
         return json_encode(['data' => $data, 'status' => 200, 'success' => true]);
     }
 
-
+    function logout()
+    {
+        return successWithoutData();
+    }
 }

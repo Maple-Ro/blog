@@ -30,7 +30,7 @@ class ArticlePresenter
                 <div class="tags">';
                 if (!empty($i['tags'])) {
                     foreach ($i['tags'] as $j) {
-                        $html .= '<a href="javascript:;">' . $j . '</a>&nbsp;';
+                        $html .= '<a href="javascript:;">#' . $j . '</a>&nbsp;';
                     }
                 }
                 $html .= '</div>

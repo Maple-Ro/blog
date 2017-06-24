@@ -20,7 +20,7 @@
                 <div class="tags">
                     @if(!empty($data->tags))
                         @foreach($data->tags as $i)
-                            <a href="javascript:;">{{$i}}</a>
+                            <a href="javascript:;">#{{$i}}</a>
                         @endforeach
                     @endif
                 </div>

@@ -21,7 +21,10 @@ class DashboardController extends Controller
 {
     const IP_API = "http://ip-api.com/php/";
     const TTL = 60 * 24 * 30 * 6;
-
+    function __construct()
+    {
+        $this->middleware('token');
+    }
     /**
      * 天气信息
      * @return string

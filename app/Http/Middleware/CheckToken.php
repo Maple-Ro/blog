@@ -15,8 +15,7 @@ class CheckToken
 {
     public function handle($request, \Closure $next)
     {
-        dd($request->header());
-        $token = $request->header('Authorization');
+        $token = $request->header('x-authorization');
         JWT::decode($token, \Yaconf::get("blog.token"), ['HS256']);
         return $next($request);
     }

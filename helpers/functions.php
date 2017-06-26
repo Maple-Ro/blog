@@ -149,3 +149,9 @@ if(!function_exists('fail')){
         ]);
     }
 }
+if (!function_exists('format')) {
+    function format(float $num, int $decimal = 2)
+    {
+        return number_format($num, $decimal, '.', '');
+    }
+}

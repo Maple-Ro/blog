@@ -11,6 +11,8 @@ namespace App\Http\Controllers\back;
 
 use App\Http\Controllers\Controller;
 use App\Model\Admin;
+use Firebase\JWT\JWT;
+use Firebase\JWT\SignatureInvalidException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -66,13 +68,18 @@ class AdminController extends Controller
         $pwd = trim($request->password);
 
         try {
-            $hashed_pwd = Admin::where('name', $name)->first()->pwd;
+            $user = Admin::where('name', $name)->first();
+            $jwt = JWT::encode([
+                'id' => $user->_id
+            ], \Yaconf::get('blog.token'));
+            $hashed_pwd = $user->pwd;
             $res = Hash::check($pwd, $hashed_pwd);
             if ($res) {
                 return json_encode([
                     'status' => 200,
                     'username' => $name,
-                    'success' => true
+                    'success' => true,
+                    'jwt' => $jwt
                 ]);
             } else {
                 return json_encode([
@@ -108,4 +115,6 @@ class AdminController extends Controller
     {
         return successWithoutData();
     }
+
+
 }

@@ -20,7 +20,7 @@ use Linfo\Linfo;
 class DashboardController extends Controller
 {
     const IP_API = "http://ip-api.com/php/";
-    const TTL = 60*24*30*6;
+    const TTL = 60 * 24 * 30 * 6;
 
     /**
      * 天气信息
@@ -49,12 +49,12 @@ class DashboardController extends Controller
     {
         $info = new Linfo();
         $parser = $info->getParser();
-        if(!Cache::has('osStaticInfo')){
+        if (!Cache::has('osStaticInfo')) {
             //系统环境相关信息
             $distr = $parser->getDistro();
-            $staticInfo['os']  = $parser->getOs();
+            $staticInfo['os'] = $parser->getOs();
             $staticInfo['distribution'] = $distr['name'] . ' ' . $distr['version'];
-            $staticInfo['kernel'] =  $parser->getKernel();
+            $staticInfo['kernel'] = $parser->getKernel();
 //            $staticInfo['hostName'] = $parser->getHostName();//主机名
 //            $staticInfo['architecture'] = $parser->getCPUArchitecture();//cpu架构
             $staticInfo['PHP'] = $parser->getPhpVersion();//PHP版本
@@ -62,34 +62,38 @@ class DashboardController extends Controller
             $staticInfo['mysql'] = $this->mysqlVersion();
             $staticInfo['mongodb'] = $this->mongodbVersion();
             $staticInfo['redis'] = $this->redisVersion();
-            Cache::put('osStaticInfo', $staticInfo, 24*60);
-        }else{
+            Cache::put('osStaticInfo', $staticInfo, 24 * 60);
+        } else {
             $staticInfo = Cache::get('osStaticInfo');
         }
-        $staticInfo['uptime']  = $parser->getUpTime()['text'];
+        $staticInfo['uptime'] = $parser->getUpTime()['text'];
         $staticInfo['uptime_booted'] = date('Y-m-d H:i:s', $parser->getUpTime()['bootedTimestamp']);
         //运行相关信息
         $load = $parser->getLoad();
         $ramUsage = $parser->getRam();
         $total = $ramUsage['total'] / 1024 / 1024;//Mb
         $free = $ramUsage['free'] / 1024 / 1024;//Mb
-        $used = $total - $free;//Mb
-        $space = (disk_total_space('/') - disk_free_space('/')) / 1024 / 1024 / 1024;
-        $used = number_format($used, 2, '.', '');
-        $space = number_format($space, 2, '.', '');
+        $ram_usage = $total - $free;//Mb
+        $ram_percent = format($ram_usage / $total, 4) * 100;
+        $space_used = (disk_total_space('/') - disk_free_space('/')) / 1024 / 1024 / 1024;
+        $total_space = (disk_total_space('/')) / 1024 / 1024 / 1024;
+        $space_percent = format($space_used / $total_space, 4) * 100;
+
         return json_encode([
             'status' => 200,
             'success' => true,
             'info' => [
                 'data' => [
-                    ['cpu' => floatval($load['15min']*100)],
-                    ['cpu' => floatval($load['5min']*100)],
-                    ['cpu' => floatval($load['now']*100)]
+                    ['cpu' => floatval($load['15min'] * 100)],
+                    ['cpu' => floatval($load['5min'] * 100)],
+                    ['cpu' => floatval($load['now'] * 100)]
                 ],
-                'usage' => floatval($used),
-                'space' => floatval($space),
-                'cpu' => floatval(number_format(($load['15min']+$load['5min']+$load['now'])/3*100, 2, '.', '')),
-                'staticInfo'=>$staticInfo
+                'ram_usage' => format($ram_usage),
+                'ram_percent' => format($ram_percent),
+                'space_used' => format($space_used),
+                'space_percent' => format($space_percent),
+                'cpu' => floatval(format(($load['15min'] + $load['5min'] + $load['now']) / 3 * 100)),
+                'staticInfo' => $staticInfo
             ]
         ]);
     }
@@ -192,13 +196,13 @@ class DashboardController extends Controller
                     $result[$k]['ip'] = $v['_id'];
                     $result[$k]['count'] = $v['count'];
                     //缓存已经查询过的ip地址
-                    if(Cache::has('ip_'.$v['_id'])){
-                        $result[$k]['addr'] = Cache::get('ip_'.$v['_id']);
-                    }else{
+                    if (Cache::has('ip_' . $v['_id'])) {
+                        $result[$k]['addr'] = Cache::get('ip_' . $v['_id']);
+                    } else {
                         $addr = unserialize(callThirdApi(self::IP_API . $v['_id']));
                         if ($addr['status'] === 'success') {
                             $result[$k]['addr'] = $addr;
-                            Cache::put('ip_'.$v['_id'], $addr, self::TTL);
+                            Cache::put('ip_' . $v['_id'], $addr, self::TTL);
                         } else {
                             $result[$k]['addr'] = [];
                         }
@@ -281,14 +285,14 @@ class DashboardController extends Controller
             foreach ($res as $k => $v) {
                 if (!!$v['_id'] && $v['count'] > 100) {
 
-                    if(Cache::has('ip_'.$v['_id'])){
-                        $addr = Cache::get('ip_'.$v['_id']);
-                    }else{
+                    if (Cache::has('ip_' . $v['_id'])) {
+                        $addr = Cache::get('ip_' . $v['_id']);
+                    } else {
                         $addr = unserialize(callThirdApi(self::IP_API . $v['_id']));
 //                        $addr = unserialize(file_get_contents(self::IP_API . $v['_id']));
 
                         if ($addr['status'] === 'success') {
-                            Cache::put('ip_'.$v['_id'], $addr, self::TTL);
+                            Cache::put('ip_' . $v['_id'], $addr, self::TTL);
                         }
                     }
                     array_push($result, [
@@ -340,22 +344,12 @@ class DashboardController extends Controller
                 $result[$k]['lat'] = $v['_id']['lat'];
                 $result[$k]['count'] = $v['count'];
             }
-//        $res = DB::table('shadowsocks_static_log')
-//            ->select('city', 'lon', 'lat', DB::raw('sum(num) as total'))
-//            ->groupBy('city')
-//            ->orderBy('total', 'desc')
-//            ->get()
-//        ->toArray();
             $data = $result;
             Cache::put('map', $result, 24 * 60);
         } else {
             $data = Cache::get('map');
         }
-        return json_encode($data);
-//        return json_encode([
-//            'status' => 200,
-//            'data' => $data
-//        ]);
+        return successWithData($data);
     }
 
     private function mysqlVersion(): string
@@ -378,7 +372,7 @@ class DashboardController extends Controller
         try {
             $r = new \Redis();
             $r->connect('127.0.0.1');
-            $s =  $r->info()['redis_version'];
+            $s = $r->info()['redis_version'];
             $r->close();
             return $s;
         } catch (\Exception $e) {
@@ -386,11 +380,12 @@ class DashboardController extends Controller
         }
     }
 
-    private function mongodbVersion():string {
+    private function mongodbVersion(): string
+    {
         try {
             $s = shell_exec('mongo --version');
             $v = explode(" ", $s)[3];
-            return substr($v, 0, strrpos($v, '.')+2);
+            return substr($v, 0, strrpos($v, '.') + 2);
         } catch (\Exception $e) {
             return '';
         }

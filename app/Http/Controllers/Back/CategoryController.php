@@ -8,6 +8,10 @@ use App\Model\Category;
 
 class CategoryController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('token');
+    }
     function list(): string
     {
         $list = Category::all()->toArray();

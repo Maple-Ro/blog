@@ -14,6 +14,10 @@ use App\Model\Tags;
 
 class TagsController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('token');
+    }
     function list()
     {
         $tagsList = Tags::all()->toArray();

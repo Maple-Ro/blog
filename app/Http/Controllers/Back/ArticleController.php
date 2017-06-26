@@ -24,6 +24,7 @@ class ArticleController extends Controller
 
     function __construct()
     {
+        $this->middleware('token');
     }
 
     /**

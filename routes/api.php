@@ -15,9 +15,9 @@ use Illuminate\Http\Request;
 /**解决跨域问题*/
 header('Access-Control-Allow-Origin:' . env('ORIGIN'));
 header('Access-Control-Allow-Methods:POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers:X-Authorization');
+header('Access-Control-Allow-Headers:Content-type, X-Authorization');
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Request-Headers:X-Authorization');
+header('Access-Control-Request-Headers:Content-type, X-Authorization');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

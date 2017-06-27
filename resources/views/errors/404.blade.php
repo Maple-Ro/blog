@@ -5,8 +5,8 @@
 @section('content')
     <div class="container">
         <div class="content">
-            <div class="title">404</div>
-            <h5><a href="/">Back</a></h5>
+            <div class="title">404 NOT FOUND</div>
+            <h5><a href="/">Back to Home</a></h5>
         </div>
     </div>
 @endsection

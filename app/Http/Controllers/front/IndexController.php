@@ -50,13 +50,17 @@ class IndexController extends Controller
      */
     function detail(string $id)
     {
-        $data = Article::find($id);
-        $data->visits += 1;
-        $data->save();
-        if (empty($data) || !$data->state) {
+        try {
+            $data = Article::find($id);
+            $data->visits += 1;
+            $data->save();
+            if (empty($data) || !$data->state) {
+                abort(404);
+            }
+            return frontView('detail')->with(compact(['data']));
+        } catch (\Exception $e) {
             abort(404);
         }
-        return frontView('detail')->with(compact(['data']));
     }
 
     /**

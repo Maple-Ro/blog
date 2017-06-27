@@ -43,9 +43,16 @@ class IndexController extends Controller
         return frontView('content')->with(compact(['data', 'links']));
     }
 
+    /**
+     * 更新每篇文章的点击量
+     * @param string $id
+     * @return mixed
+     */
     function detail(string $id)
     {
         $data = Article::find($id);
+        $data->visits +=1;
+        $data->save();
         if (empty($data) || !$data->state) {
             abort(404);
         }

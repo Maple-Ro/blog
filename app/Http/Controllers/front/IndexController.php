@@ -51,7 +51,7 @@ class IndexController extends Controller
     function detail(string $id)
     {
         $data = Article::find($id);
-        $data->visits +=1;
+        $data->visits += 1;
         $data->save();
         if (empty($data) || !$data->state) {
             abort(404);
